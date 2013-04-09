@@ -8,6 +8,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace SctpHostData
 {
@@ -18,7 +19,7 @@ namespace SctpHostData
 	{
 		#region Properties
 		
-		public Endpoint LocalEndpoint
+		public SctpEndpoint LocalEndpoint
 		{
 			get; internal set;
 		}
@@ -84,7 +85,7 @@ namespace SctpHostData
 		
 		#endregion Properties
 				
-		public SctpAssociation(Endpoint localEp, UInt16 rPort, String remIp1, String remIp2)
+		internal SctpAssociation(SctpEndpoint localEp, UInt16 rPort, String remIp1, String remIp2)
 		{
 			if (localEp == null)
 				throw new NullReferenceException("null Enpoint parameter passed to constructor of Asscoiation");
@@ -94,10 +95,10 @@ namespace SctpHostData
 			this.RemoteIpAddress2 = remIp2;
 		}
 		
-		public SctpAssociation(UInt16 lPort, String locIp1, String locIp2,
-		                       UInt16 rPort, String remIp1, String remIp2)
+		internal SctpAssociation(UInt16 lPort, String locIp1, String locIp2,
+		                         UInt16 rPort, String remIp1, String remIp2)
 		{
-			this.LocalEndpoint  = new Endpoint(lPort,locIp1, locIp2);
+			this.LocalEndpoint  = new SctpEndpoint(lPort,locIp1, locIp2);
 			this.RemotePort = rPort;
 			this.RemoteIpAddress1 = remIp1;
 			this.RemoteIpAddress2 = remIp2;
@@ -105,8 +106,13 @@ namespace SctpHostData
 		
 		public override string ToString()
 		{
-			return "["+assocId.ToString()+"]"+ LocalEndpoint.ToString() + " - "
-				+ this.RemoteIpAddress1 + ";" + this.RemoteIpAddress2+ this.RemotePort.ToString();
+			StringBuilder assocStr = new StringBuilder(LocalEndpoint+" - " + RemoteIpAddress1, 210);
+			if (RemoteIpAddress2 != "")
+			{
+				assocStr.AppendFormat("; {0}", RemoteIpAddress2);
+			}
+			assocStr.AppendFormat(" :{0}", RemotePort);
+			return assocStr.ToString();
 		}
 
 	}

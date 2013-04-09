@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using SctpHostData;
 
 namespace consoleTester
 {
@@ -39,6 +40,17 @@ namespace consoleTester
 		{
 			Console.WriteLine("sctphost parser");
 			
+			SctpEndpoint ep = new SctpEndpoint(1000, "192.168.10.1", "192.168.10.2");
+			
+			for (ushort i=1; i<10;i++)
+			{
+				ep.AddAssocaitioin(i, "192.168.0." + i.ToString());
+			}
+			
+			foreach(SctpAssociation assoc in ep.Associations)
+			{
+				Console.WriteLine(assoc);
+			}
 			// TODO: Implement Functionality Here
 			
 			Console.Write("Press any key to continue . . . ");

@@ -8,13 +8,14 @@
  */
 using System;
 using System.Collections.ObjectModel;
+using System.Text;
 
 namespace SctpHostData
 {
 	/// <summary>
 	/// Description of Endpoint.
 	/// </summary>
-	public class Endpoint
+	public class SctpEndpoint
 	{
 		public UInt16 Port 
 		{ 
@@ -39,18 +40,31 @@ namespace SctpHostData
 			get; internal set;			
 		}
 		
-		public Endpoint(UInt16 port, String ip1, String ip2)
+		public SctpEndpoint(UInt16 port, String ip1, String ip2)
 		{
 			this.Port = port;
 			this.IP1 = ip1;
 			this.IP2 = ip2;
+			
+			this.Associations = new ObservableCollection<SctpAssociation>();
 		}
 		
-		
+		public SctpAssociation AddAssocaitioin(UInt16 remPort, String remIp1, String remIp2="")
+		{
+			SctpAssociation newAssoc = new SctpAssociation(this, remPort, remIp1, remIp2);
+			this.Associations.Add(newAssoc);
+			return newAssoc;
+		}
 		
 		public override string ToString()
 		{
-			return IP1+";"+IP2+ Port.ToString();
+			StringBuilder epStr = new StringBuilder(IP1, 100);
+			if (IP2 != "")
+			{
+				epStr.AppendFormat("; {0}", IP2);
+			}
+			epStr.AppendFormat(" :{0}", Port);
+			return epStr.ToString();
 		}
 
 		
