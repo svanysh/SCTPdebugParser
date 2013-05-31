@@ -41,9 +41,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssocCounters.cs" />
     <Compile Include="Association.cs" />
+    <Compile Include="ExtClient.cs" />
     <Compile Include="SctpEndpoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SctpHost.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

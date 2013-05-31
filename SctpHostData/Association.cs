@@ -12,6 +12,18 @@ using System.Text;
 
 namespace SctpHostData
 {
+	public struct IpPath
+	{
+		public string localAddress;
+		public string remoteAddress;
+		public IpPath(string l, string r)
+		{
+			localAddress = l;
+			remoteAddress = r;
+		}
+	}
+
+	
 	/// <summary>
 	/// Description of MyClass.
 	/// </summary>
@@ -19,30 +31,8 @@ namespace SctpHostData
 	{
 		#region Properties
 		
-		public SctpEndpoint LocalEndpoint
-		{
-			get; internal set;
-		}
 		
-		public uint assocId {get;set;}
-
-		public UInt16 RemotePort
-		{
-			get;
-			internal set;
-		}
-
-		public String RemoteIpAddress1
-		{
-			get;
-			internal set;
-		}
-		
-		public String RemoteIpAddress2
-		{
-			get;
-			internal set;
-		}
+		public int ID {get;set;}
 
 		#region Extended Propterties
 		public UInt16 LocalPort
@@ -83,26 +73,62 @@ namespace SctpHostData
 	
 		#endregion Extended Propterties
 		
+		public UInt16 RemotePort
+		{
+			get;
+			internal set;
+		}
+
+		public String RemoteIpAddress1
+		{
+			get;
+			internal set;
+		}
+		
+		public String RemoteIpAddress2
+		{
+			get;
+			internal set;
+		}
+	
+		public SctpEndpoint LocalEndpoint
+		{
+			get; internal set;
+		}
+				
+		public List<IpPath> Pathes { get; internal set;}
+		
+		public AssocCounters counters;
+		
 		#endregion Properties
 				
-		internal SctpAssociation(SctpEndpoint localEp, UInt16 rPort, String remIp1, String remIp2)
+		internal SctpAssociation(int assocId, SctpEndpoint localEp, UInt16 rPort, List<IpPath> pathes)
 		{
 			if (localEp == null)
 				throw new NullReferenceException("null Enpoint parameter passed to constructor of Asscoiation");
+			if (pathes == null || pathes.Count < 1)
+				throw new NullReferenceException("empty pathes list passed to contructor of Association");
+			this.ID =assocId;
 			this.LocalEndpoint = localEp;
 			this.RemotePort = rPort;
-			this.RemoteIpAddress1 = remIp1;
-			this.RemoteIpAddress2 = remIp2;
+			this.Pathes = pathes;
+			this.RemoteIpAddress1 = pathes[0].remoteAddress;
+			if (pathes.Count > 1 && pathes[1].remoteAddress != this.RemoteIpAddress1)
+				this.RemoteIpAddress2 = pathes[1].remoteAddress;
+			else if (pathes.Count > 3 && pathes[2].remoteAddress != this.RemoteIpAddress1)
+				this.RemoteIpAddress2 = pathes[2].remoteAddress;
+			
+			localEp.Associations.Add(this);
 		}
 		
-		internal SctpAssociation(UInt16 lPort, String locIp1, String locIp2,
+/*		internal SctpAssociation(UInt16 lPort, String locIp1, String locIp2,
 		                         UInt16 rPort, String remIp1, String remIp2)
 		{
 			this.LocalEndpoint  = new SctpEndpoint(lPort,locIp1, locIp2);
 			this.RemotePort = rPort;
 			this.RemoteIpAddress1 = remIp1;
 			this.RemoteIpAddress2 = remIp2;
-		}
+		} */
 		
 		public override string ToString()
 		{

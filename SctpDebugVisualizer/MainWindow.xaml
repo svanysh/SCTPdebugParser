@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Window
+	x:Class="SctpDebugVisualizer.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	Title="sctphost parser"
+	Height="600"
+	Width="800">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition
+				Height="Auto" />
+			<RowDefinition
+				Height="*" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition
+				Width="*" />
+			<ColumnDefinition
+				Width="*" />
+			<ColumnDefinition
+				Width="*" />
+		</Grid.ColumnDefinitions>
+		<StackPanel
+			Orientation="Horizontal"
+			Grid.ColumnSpan="3">
+			<Button
+				ToolTip="open file with one output of sctphost -all coli command"
+				Height="40"
+				Name="button1"
+				Click="Load_Click">Load</Button>
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition />
+					<ColumnDefinition />
+					<ColumnDefinition />
+					<ColumnDefinition />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition />
+					<RowDefinition />
+				</Grid.RowDefinitions>
+				<Label
+					Grid.Row="0"
+					Grid.Column="0"
+					FontWeight="Bold">RPU id</Label>
+				<Label
+					Grid.Row="0"
+					Grid.Column="1"
+					Content="{Binding Path=RpuId}" />
+				<Label
+					Grid.Row="0"
+					Grid.Column="2"
+					FontWeight="Bold">CP id</Label>
+				<Label
+					Grid.Row="0"
+					Grid.Column="3"
+					Content="{Binding Path=CpId}" />
+				<Label
+					Grid.Row="2"
+					Grid.Column="0"
+					FontWeight="Bold">Board</Label>
+				<Label
+					Grid.Row="2"
+					Grid.Column="1"
+					Content="{Binding Path=Board}" />
+			</Grid>
+		</StackPanel>
+		<Expander
+			Grid.Row="1"
+			Grid.Column="0"
+			IsExpanded="True">
+			<Expander.Header>
+				<StackPanel
+					Orientation="Horizontal">
+					<Label>Endpoints [</Label>
+					<Label
+						Content="{Binding Path=Endpoints.Count}" />
+					<Label>], </Label>
+					<Label
+						x:Name="EpFilterLabel">All</Label>
+				</StackPanel>
+			</Expander.Header>
+			<DataGrid
+				x:Name="EndpointsDG"
+				ItemsSource="{Binding Path=Endpoints}"
+				RowBackground="Azure"
+				AlternatingRowBackground="Beige"
+				HorizontalGridLinesBrush="Transparent"
+				VerticalGridLinesBrush="#FFB9D1EA"
+				AutoGenerateColumns="False">
+				<DataGrid.Columns>
+					<DataGridTextColumn
+						Header="ID"
+						Binding="{Binding Path=ID}" />
+					<DataGridTextColumn
+						Header="Port"
+						Binding="{Binding Path=Port}" />
+					<DataGridTextColumn
+						Header="IP1"
+						Binding="{Binding Path=IP1}" />
+					<DataGridTextColumn
+						Header="IP2"
+						Binding="{Binding Path=IP2}" />
+					<DataGridHyperlinkColumn
+						Header="Client"
+						Binding="{Binding Path=ClientId}" />
+				</DataGrid.Columns>
+			</DataGrid>
+		</Expander>
+		<Expander
+			Grid.Row="1"
+			Grid.Column="1"
+			IsExpanded="True">
+			<Expander.Header>
+				<StackPanel
+					Orientation="Horizontal">
+					<Label>Associations [</Label>
+					<Label
+						Content="{Binding Path=Associations.Count}" />
+					<Label>], </Label>
+					<Label
+						x:Name="AssocFilterLabel">All</Label>
+				</StackPanel>
+			</Expander.Header>
+			<DataGrid
+				x:Name="AssociationsDG"
+				ItemsSource="{Binding Path=Associations, Mode=OneWay}"
+				RowBackground="LightCyan"
+				AlternatingRowBackground="Azure"
+				HorizontalGridLinesBrush="Transparent"
+				AutoGenerateColumns="False"
+				MouseDoubleClick="AssociationsDG_MouseDoubleClick"
+				CanUserResizeRows="False"
+				IsReadOnly="True">
+				<DataGrid.Columns>
+					<DataGridTextColumn
+						Header="ID"
+						Binding="{Binding Path=ID}" IsReadOnly="True"/>
+					<DataGridHyperlinkColumn
+						Header="epID"
+						Binding="{Binding Path=LocalEndpoint.ID}" />
+					<DataGridTextColumn
+						Header="rIP1"
+						Binding="{Binding Path=RemoteIpAddress1}" />
+					<DataGridTextColumn
+						Header="rIP2"
+						Binding="{Binding Path=RemoteIpAddress2}" />
+				</DataGrid.Columns>
+			</DataGrid>
+		</Expander>
+	</Grid>
+</Window>

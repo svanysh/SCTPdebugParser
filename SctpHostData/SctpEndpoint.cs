@@ -17,7 +17,10 @@ namespace SctpHostData
 	/// </summary>
 	public class SctpEndpoint
 	{
-		public UInt16 Port 
+        #region Properties
+        public int ID {get;set;}
+        
+		public UInt16 Port
 		{ 
 			get;
 			set;
@@ -35,26 +38,34 @@ namespace SctpHostData
 			set;
 		}
 		
+		public int DSCP{get; set;}
+		
+		public int? ClientId {get; set;}
+		
 		public ObservableCollection<SctpAssociation> Associations
 		{
 			get; internal set;			
 		}
-		
-		public SctpEndpoint(UInt16 port, String ip1, String ip2)
+		#endregion Properties
+				
+		public SctpEndpoint(int id, UInt16 port, String ip1, String ip2, int dscp=0, int? clientId=null)
 		{
+			this.ID = id;
 			this.Port = port;
 			this.IP1 = ip1;
 			this.IP2 = ip2;
+			this.DSCP = dscp;
+			this.ClientId = clientId;
 			
 			this.Associations = new ObservableCollection<SctpAssociation>();
 		}
 		
-		public SctpAssociation AddAssocaitioin(UInt16 remPort, String remIp1, String remIp2="")
+		/*public SctpAssociation AddAssocaitioin(int assocId, UInt16 remPort, String remIp1, String remIp2="")
 		{
-			SctpAssociation newAssoc = new SctpAssociation(this, remPort, remIp1, remIp2);
+			SctpAssociation newAssoc = new SctpAssociation(assocId, this, remPort, remIp1, remIp2);
 			this.Associations.Add(newAssoc);
 			return newAssoc;
-		}
+		}*/
 		
 		public override string ToString()
 		{
