@@ -30,6 +30,7 @@ namespace SctpHostData
 	/// </summary>
 	public class SctpHost
 	{
+		#region Properties		
 		public Dictionary<int, SctpEndpoint> Endpoints {get; internal set;}
 		public Dictionary<int, SctpAssociation> Associations {get;set;}
 		public Dictionary<int, ExtClient> SCTPIclients{get;set;}
@@ -39,7 +40,8 @@ namespace SctpHostData
 		public string BASEstate {get; internal set;}
 		public string HOSTstate {get; internal set;}
 		public BoardType Board {get; internal set;}
-	
+		#endregion Properties
+		
 		public SctpHost(String fileName)
 		{
 			if(fileName == "" || !File.Exists(fileName))
@@ -60,7 +62,7 @@ namespace SctpHostData
 			{
 				throw new Exception("could not parse ext client info in sctphost COLI command");
 			}
-			if(!ParseEnpoints())
+			if(!ParseEndpoints())
 			{
 				throw new Exception("could not parse endpoints in scpthost coli command from target file: "+ fileName);
 			}
@@ -296,7 +298,7 @@ namespace SctpHostData
 			return true;
 		}
 		
-		protected bool ParseEnpoints()
+		protected bool ParseEndpoints()
 		{
 			/* M3UA endpoints */
 			foreach(Match m in Regex.Matches(input, m3epPat))
@@ -396,6 +398,37 @@ namespace SctpHostData
 					SctpAssociation assoc = Associations[aId];
 					assoc.counters.OutDataChunks=Convert.ToInt32(m.Groups["OutDC"].Value);
 					assoc.counters.InDataChunks=Convert.ToInt32(m.Groups["InDC"].Value);
+					assoc.counters.OutOutOfOrderedChunks=Convert.ToInt32(m.Groups["OutOOO"].Value);
+					assoc.counters.InOutOfOrdered=Convert.ToInt32(m.Groups["InOOO"].Value);
+					assoc.counters.RtxChunks=Convert.ToInt32(m.Groups["Rtx"].Value);
+					assoc.counters.OutControlChunks=Convert.ToInt32(m.Groups["OutCC"].Value);
+					assoc.counters.InControlChunks=Convert.ToInt32(m.Groups["InCC"].Value);
+					assoc.counters.OutFragmentedUserMsges=Convert.ToInt32(m.Groups["OutFragUM"].Value);
+					assoc.counters.InReassembledUserMsges=Convert.ToInt32(m.Groups["InReasUM"].Value);
+					assoc.counters.OutPacks=Convert.ToInt32(m.Groups["OutPacks"].Value);
+					assoc.counters.InPacks=Convert.ToInt32(m.Groups["InPacks"].Value);
+					assoc.counters.Congestions=Convert.ToInt32(m.Groups["Cong"].Value);
+					assoc.counters.CongestionCeased=Convert.ToInt32(m.Groups["CongCease"].Value);
+					assoc.counters.OutUserMsgDiscards=Convert.ToInt32(m.Groups["OutUMdisc"].Value);
+					assoc.counters.InChunksDropped=Convert.ToInt32(m.Groups["InChunkDrop"].Value);
+					
+					assoc.counters.InDataChunkUnexpected=Convert.ToInt32(m.Groups["InDCunexp"].Value);
+					assoc.counters.InDataChunkDiscards=Convert.ToInt32(m.Groups["InDCdisc"].Value);
+					
+					if(m.Groups["InSACKgap"].Value != "")
+					{
+						assoc.counters.InSackWithGap=Convert.ToInt32(m.Groups["InSACKgap"].Value);
+						assoc.counters.OutSackWithGap=Convert.ToInt32(m.Groups["OutSACKgap"].Value);					
+						assoc.counters.HBtimeouts=Convert.ToInt32(m.Groups["HBto"].Value);
+						assoc.counters.InControlChunksAbnormal=Convert.ToInt32(m.Groups["InCCabnorm"].Value);
+						assoc.counters.InControlChunkDiscards=Convert.ToInt32(m.Groups["InCCdisc"].Value);
+						assoc.counters.InDataChunkAbnormal=Convert.ToInt32(m.Groups["InDCabnorm"].Value);
+						assoc.counters.OwnZeroWindows=Convert.ToInt32(m.Groups["Own0win"].Value);
+						assoc.counters.TimeOwnZeroWindow=Convert.ToInt32(m.Groups["Own0winTime"].Value);
+						assoc.counters.PeerZeroWindows=Convert.ToInt32(m.Groups["Peer0win"].Value);
+						assoc.counters.TimePeerZeroWindow=Convert.ToInt32(m.Groups["Peer0winTime"].Value);
+						assoc.counters.TimeCongested=Convert.ToInt32(m.Groups["CongTime"].Value);
+					}
 				}
 				catch {continue;}
 			}
