@@ -4,20 +4,26 @@
 	Title="sctphost parser"
 	Height="600"
 	Width="800">
+	<Window.Resources>
+		<Style TargetType="DataGrid">
+			<Setter Property="AutoGenerateColumns" Value="False"/>
+			<Setter Property="IsReadOnly" Value="True"/>
+			
+			<Setter Property="HorizontalGridLinesBrush" Value="Transparent"/>
+			<Setter Property="RowBackground" Value="LightCyan"/>
+			<Setter Property="AlternatingRowBackground" Value="Azure"/>	
+			<Setter Property="CanUserResizeRows" Value="False"/>
+		</Style>
+	</Window.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition
-				Height="Auto" />
-			<RowDefinition
-				Height="*" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition
-				Width="*" />
-			<ColumnDefinition
-				Width="*" />
-			<ColumnDefinition
-				Width="*" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
 		<StackPanel
 			Orientation="Horizontal"
@@ -64,52 +70,40 @@
 					Content="{Binding Path=Board}" />
 			</Grid>
 		</StackPanel>
-		<Expander
-			Grid.Row="1"
-			Grid.Column="0"
-			IsExpanded="True">
+		<StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical">
+			<!-- Clients -->
+			<Expander IsExpanded="True" Header="SCTPI clients">
+				<DataGrid x:Name="ClientsDG" ItemsSource="{Binding Path=Clients, Mode=OneWay}">
+					<DataGrid.Columns>
+						<DataGridTextColumn Header="ID" Binding="{Binding Path=ID}"/>
+						<DataGridTextColumn Header="PV" Binding="{Binding Path=PV}"/>
+						<DataGridTextColumn Header="PID" Binding="{Binding Path=PID}"/>
+					</DataGrid.Columns>
+				</DataGrid>
+			</Expander>
+
+			<Expander IsExpanded="True">
 			<Expander.Header>
-				<StackPanel
-					Orientation="Horizontal">
+				<StackPanel Orientation="Horizontal">
 					<Label>Endpoints [</Label>
-					<Label
-						Content="{Binding Path=Endpoints.Count}" />
+					<Label Content="{Binding Path=Endpoints.Count}" />
 					<Label>], </Label>
-					<Label
-						x:Name="EpFilterLabel">All</Label>
+					<Label x:Name="EpFilterLabel">All</Label>
 				</StackPanel>
 			</Expander.Header>
-			<DataGrid
-				x:Name="EndpointsDG"
-				ItemsSource="{Binding Path=Endpoints}"
-				RowBackground="Azure"
-				AlternatingRowBackground="Beige"
-				HorizontalGridLinesBrush="Transparent"
-				VerticalGridLinesBrush="#FFB9D1EA"
-				AutoGenerateColumns="False">
+			<DataGrid x:Name="EndpointsDG" ItemsSource="{Binding Path=Endpoints}">
 				<DataGrid.Columns>
-					<DataGridTextColumn
-						Header="ID"
-						Binding="{Binding Path=ID}" />
-					<DataGridTextColumn
-						Header="Port"
-						Binding="{Binding Path=Port}" />
-					<DataGridTextColumn
-						Header="IP1"
-						Binding="{Binding Path=IP1}" />
-					<DataGridTextColumn
-						Header="IP2"
-						Binding="{Binding Path=IP2}" />
-					<DataGridHyperlinkColumn
-						Header="Client"
-						Binding="{Binding Path=ClientId}" />
+					<DataGridTextColumn Header="ID" Binding="{Binding Path=ID}" />
+					<DataGridTextColumn Header="Port" Binding="{Binding Path=Port}" />
+					<DataGridTextColumn Header="IP1" Binding="{Binding Path=IP1}" />
+					<DataGridTextColumn Header="IP2" Binding="{Binding Path=IP2}" />
+					<DataGridHyperlinkColumn Header="Client" Binding="{Binding Path=ClientId}" />
 				</DataGrid.Columns>
 			</DataGrid>
 		</Expander>
-		<Expander
-			Grid.Row="1"
-			Grid.Column="1"
-			IsExpanded="True">
+		
+		</StackPanel>
+		<Expander Grid.Row="1" Grid.Column="1" IsExpanded="True">
 			<Expander.Header>
 				<StackPanel
 					Orientation="Horizontal">
@@ -121,16 +115,8 @@
 						x:Name="AssocFilterLabel">All</Label>
 				</StackPanel>
 			</Expander.Header>
-			<DataGrid
-				x:Name="AssociationsDG"
-				ItemsSource="{Binding Path=Associations, Mode=OneWay}"
-				RowBackground="LightCyan"
-				AlternatingRowBackground="Azure"
-				HorizontalGridLinesBrush="Transparent"
-				AutoGenerateColumns="False"
-				MouseDoubleClick="AssociationsDG_MouseDoubleClick"
-				CanUserResizeRows="False"
-				IsReadOnly="True">
+			<DataGrid x:Name="AssociationsDG" ItemsSource="{Binding Path=Associations, Mode=OneWay}"
+				MouseDoubleClick="AssociationsDG_MouseDoubleClick">
 				<DataGrid.Columns>
 					<DataGridTextColumn
 						Header="ID"

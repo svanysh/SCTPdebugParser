@@ -38,8 +38,10 @@ namespace SctpDebugVisualizer.ViewModel
 			}
 			Endpoints = new ObservableCollection<SctpEndpoint>(sctphost.Endpoints.Values);
 			Associations = new ObservableCollection<SctpAssociation>(sctphost.Associations.Values);
+			Clients = new ObservableCollection<ExtClient>(sctphost.SCTPIclients.Values);
 			RaisePropChange("Endpoints");
 			RaisePropChange("Associations");
+			RaisePropChange("Clients");
 			RaisePropChange("RpuId");
 			RaisePropChange("CpId");
 			RaisePropChange("BASEstate");
@@ -51,6 +53,7 @@ namespace SctpDebugVisualizer.ViewModel
 		#region Properties
 		public ObservableCollection<SctpEndpoint> Endpoints {get; set;}
 		public ObservableCollection<SctpAssociation> Associations { get; set;}
+		public ObservableCollection<ExtClient> Clients {get;set;}
 				
 		public int RpuId {get {return sctphost.RpuId;}}			
 		public int CpId {get{return sctphost.CpId;}}
