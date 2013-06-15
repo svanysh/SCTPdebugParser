@@ -35,6 +35,8 @@ namespace SctpHostData
 		public Dictionary<int, SctpAssociation> Associations {get;set;}
 		public Dictionary<int, ExtClient> SCTPIclients{get;set;}
 		
+		public HostConfig Configuration {get;set;}
+		
 		public int RpuId {get; internal set;}
 		public int CpId {get; internal set;}
 		public string BASEstate {get; internal set;}
@@ -51,6 +53,8 @@ namespace SctpHostData
 			Endpoints = new Dictionary<int, SctpEndpoint>(128);
 			Associations = new Dictionary<int, SctpAssociation>(512);
 			SCTPIclients = new Dictionary<int, ExtClient>(8);
+			Configuration = new HostConfig();
+			
 			StreamReader sr = File.OpenText(fileName);
 			input = sr.ReadToEnd();
 			
@@ -58,6 +62,10 @@ namespace SctpHostData
 			{
 				throw new Exception("could not parse header of sctphost COLI command");
 			}
+			if(!ParseConfig())
+			{
+				throw new Exception("could not parse configuration part of sctphost COLI command");
+			}			
 			if (!ParseExtClientsInfo())
 			{
 				throw new Exception("could not parse ext client info in sctphost COLI command");
@@ -248,6 +256,66 @@ namespace SctpHostData
 			
 		#endregion ext clients
 		
+		#region BASE SCTP config
+		
+		/// <summary>
+		/// Pattern for BASE configuration file
+		/// </summary>
+		/// <example>
+		/// BASE labels
+ 		/// CP:   CAA20129-CP-R18F_3_EC06
+ 		/// MM:   CAA20130-MM-R9L
+ 		/// FEIF: CAA901892-FE_HD-R7F_3
+ 		/// SCTP: CAA901548-SCTP-R10F_1_EC02
+		/// SCTP configFile:
+		/// # SCTP config
+		/// CAA901548R10T	File Version Number
+		///...
+		/// </example>
+		const string sctpCFpat = 
+			@".*BASE labels.*\n.*CP:\s+(?<CPv>CAA20129-CP-R[\w|_]+).*\n"+
+			@".*MM:\s+(?<MMv>CAA20130-MM-R[\w|_]+).*\n"+
+			@"(?:.*FEIF:\s+(?<FEIFv>CAA901892-FE_HD-R[\w|_]+).*\n)?"+
+			@".*SCTP:\s+(?<SCTPv>CAA901548-SCTP-R[\w|_]+).*\n"+
+			@".*\n.*\nCAA901548R(?<cfVer>[\w]+)\s+File Version Number.*\n"+
+			@".*(?<numOfAssocs>[0-9]+)\s+Number of Associations.*\n.*\n.*\n.*\n.*\n.*\n.*\n"+
+			@".*(?<ICMPst>[0-9]+)\s+ICMP Status.*\n.*\n.*\n.*\n.*\n"+
+			@".*(?<PortFrom>[0-9]+)\s+Port Range From.*\n"+
+			@".*(?<PortTo>[0-9]+)\s+.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n"+
+			@".*(?<AsRelBurstSize>[0-9]+)\s+Associations release burst size.*\n.*\n.*\n.*\n.*\n"+
+			@".*(?<UpdTimer64stat>[0-9]+)\s+Statistics 64bit Update Timer.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n"+
+			@".*(?<minRto>[0-9]+)\s+Minimum RTO.*\n"+
+			@".*(?<maxRto>[0-9]+)\s+Maximum RTO.*\n"+
+			@".*(?<initRto>[0-9]+)\s+Initial Retransmission time-out.*\n"+
+			@".*(?<rtoA>[0-9]+)\s+RTO Alpha.*\n"+
+			@".*(?<rtoB>[0-9]+)\s+RTO Beta.*\n"+
+			@".*(?<ValCOOKlife>[0-9]+)\s+Valid Cookie Life.*\n"+
+			@".*(?<IncCOOKlife>[0-9]+)\s+Allowed Increment Cookie Life.*\n"+
+			@".*(?<AMR>[0-9]+)\s+Assoc.Max.Rtx.*\n"+
+			@".*(?<PMR>[0-9]+)\s+Path.Max.Rtx.*\n"+
+			@".*(?<maxInitRtx>[0-9]+)\s+Maximum Initial Retransmissions.*\n"+
+			@".*(?<maxShDwnRtx>[0-9]+)\s+Maximum Shutdown Retransmissions.*\n"+
+			@".*(?<HBint>[0-9]+)\s+Heartbeat Interval.*\n.*\n"+
+			@".*(?<HBstatus>[0|1])\s+Heartbeat Status.*\n.*\n"+
+			@".*(?<InitHBint>[0-9]+)\s+Initial HB Interval.*\n.*\n"+
+			@".*(?<MIS>[0-9]+)\s+Maximum Incoming Streams.*\n"+
+			@".*(?<MOS>[0-9]+)\s+Maximum Outgoing Streams.*\n"+
+			@".*(?<M>[0-9]+)\s+M in.*\n"+
+			@".*(?<N>[0-9]+)\s+N in .*\n"+
+			@".*(?<Nperc>[0-9]+)\s+N Percentage.*\n"+
+			@".*(?<ARWND>[0-9]+)\s+Initial Rwnd.*\n.*\n.*\n.*\n"+
+			@".*(?<MaxBurst>[0-9]+)\s+Maximum Burst.*\n"+
+			@".*(?<SACKt>[0-9]+)\s+SACK Timer.*\n.*\n"+
+			@".*(?<BundlSt>[0|1])\s+Bundling Status.*\n"+
+			@".*(?<BundlT>[0-9]+)\s+Bundling Timer.*\n"+
+			@".*(?<PS>[0-9]+)\s+Path Selection.*\n"+
+			@".*(?<PMTU>[0-9]+)\s+PMTU in.*\n.*\n.*\n.*\n.*\n.*\n"+
+			@".*(?<minThr>[0-9]+)\s+Minimum Activate Threshold.*\n"+
+			@".*(?<maxThr>[0-9]+)\s+Maximum Activate Threshold.*\n.*\n"+
+			@".*(?<PFMR>[0-9]+)\s+Primary path max rtx.*\n.*\n.*\n"+
+			@".*(?<DSCP>[0-9]+)\s+DSCP.*\n";
+		
+		#endregion
 		
 		#endregion
 		
@@ -275,9 +343,65 @@ namespace SctpHostData
 				}
 				catch
 				{
-					//continue;
+					return false;
 				}
 			//}
+			return true;
+		}
+		
+		protected bool ParseConfig()
+		{
+			Match m = Regex.Match(input, sctpCFpat);
+			try
+			{
+				Configuration.CPversion = m.Groups["CPv"].Value;
+				Configuration.MMversion = m.Groups["MMv"].Value;
+				Configuration.FEIFversion = m.Groups["FEIFv"].Value;
+				Configuration.SCTPversion = m.Groups["SCTPv"].Value;
+				
+				Configuration.SCTPcfVersion = m.Groups["cfVer"].Value;
+				Configuration.NumOfAssociations = Convert.ToInt32(m.Groups["numOfAssocs"].Value);
+				Configuration.ICMPstatus = Convert.ToInt32(m.Groups["ICMPst"].Value);
+				Configuration.PortRangeFrom = Convert.ToInt32(m.Groups["PortFrom"].Value);
+				Configuration.PortRangeTo = Convert.ToInt32(m.Groups["PortTo"].Value);
+				Configuration.AssocReleaseBurstSize = Convert.ToInt32(m.Groups["AsRelBurstSize"].Value);
+				Configuration.Stat64bitUpdateTimer = Convert.ToInt32(m.Groups["UpdTimer64stat"].Value);
+				Configuration.MinRTO = Convert.ToInt32(m.Groups["minRto"].Value);
+				Configuration.MaxRTO = Convert.ToInt32(m.Groups["maxRto"].Value);
+				Configuration.InitialRTO = Convert.ToInt32(m.Groups["initRto"].Value);
+				Configuration.RTOalpha = Convert.ToInt32(m.Groups["rtoA"].Value);
+				Configuration.RTObeta = Convert.ToInt32(m.Groups["rtoB"].Value);
+				Configuration.ValidCookieLife = Convert.ToInt32(m.Groups["ValCOOKlife"].Value);
+				Configuration.AllowedIncrementCookieLife = Convert.ToInt32(m.Groups["IncCOOKlife"].Value);
+				Configuration.AssocMaxRtx = Convert.ToInt32(m.Groups["AMR"].Value);
+				Configuration.PathMaxRtx = Convert.ToInt32(m.Groups["PMR"].Value);
+				Configuration.MaxInitRtx = Convert.ToInt32(m.Groups["maxInitRtx"].Value);
+				Configuration.MaxShutdownRtx = Convert.ToInt32(m.Groups["maxShDwnRtx"].Value);
+				Configuration.HeartbeatInterval = Convert.ToInt32(m.Groups["HBint"].Value);
+				Configuration.HeartbeatStatus = (m.Groups["HBstatus"].Value =="1")? true:false;
+				Configuration.InitialHeartbeatInterval = Convert.ToInt32(m.Groups["InitHBint"].Value);
+				Configuration.MIS = Convert.ToInt32(m.Groups["MIS"].Value);
+				Configuration.MOS = Convert.ToInt32(m.Groups["MOS"].Value);
+				Configuration.Mbuffer = Convert.ToInt32(m.Groups["M"].Value);
+				Configuration.Nthreshold = Convert.ToInt32(m.Groups["N"].Value);
+				Configuration.Npercentage = Convert.ToInt32(m.Groups["Nperc"].Value);
+				Configuration.InitialARWND = Convert.ToInt32(m.Groups["ARWND"].Value);
+				Configuration.MaxBurst = Convert.ToInt32(m.Groups["MaxBurst"].Value);
+				Configuration.SACKtimer = Convert.ToInt32(m.Groups["SACKt"].Value);
+				Configuration.BundlingStatus = (m.Groups["BundlSt"].Value=="1") ? true : false;
+				Configuration.BundlingTimer = Convert.ToInt32(m.Groups["BundlT"].Value);
+				Configuration.PathSelection = Convert.ToInt32(m.Groups["PS"].Value);
+				Configuration.PMTU = Convert.ToInt32(m.Groups["PMTU"].Value);
+				Configuration.minThreshold = Convert.ToInt32(m.Groups["minThr"].Value);
+				Configuration.maxThreshold = Convert.ToInt32(m.Groups["maxThr"].Value);
+				Configuration.PFMR = Convert.ToInt32(m.Groups["PFMR"].Value);
+				Configuration.DSCP = Convert.ToInt32(m.Groups["DSCP"].Value);
+				
+			}
+			catch
+			{
+				return false;
+			}
 			return true;
 		}
 		

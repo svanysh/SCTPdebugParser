@@ -44,6 +44,7 @@
     <Compile Include="AssocCounters.cs" />
     <Compile Include="Association.cs" />
     <Compile Include="ExtClient.cs" />
+    <Compile Include="HostConfig.cs" />
     <Compile Include="SctpEndpoint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SctpHost.cs" />

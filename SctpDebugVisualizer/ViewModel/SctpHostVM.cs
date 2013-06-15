@@ -47,6 +47,7 @@ namespace SctpDebugVisualizer.ViewModel
 			RaisePropChange("BASEstate");
 			RaisePropChange("HOSTstate");
 			RaisePropChange("Board");			
+			RaisePropChange("Configuration");	
 			return true;
 		}
 		
@@ -60,6 +61,8 @@ namespace SctpDebugVisualizer.ViewModel
 		public string BASEstate {get{return sctphost.BASEstate;}}
 		public string HOSTstate {get{return sctphost.HOSTstate;}}
 		public BoardType Board {get{return sctphost.Board;}}
+		
+		public HostConfig Configuration {get {return sctphost.Configuration;}}
 		#endregion Properties
 		
 		#region INotifyPropertyChanged

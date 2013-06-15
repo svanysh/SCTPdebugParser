@@ -133,5 +133,32 @@
 				</DataGrid.Columns>
 			</DataGrid>
 		</Expander>
+		<Expander Grid.Column="2" Grid.Row="1" Header="BASE labels" IsExpanded="True">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+			
+				<Label Grid.Row="0" FontWeight="Bold">SCTP</Label>
+				<Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=Configuration.SCTPversion}"/>
+
+				<Label Grid.Row="1" FontWeight="Bold">CP</Label>
+				<Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=Configuration.CPversion}"/>
+
+				<Label Grid.Row="2" FontWeight="Bold">FEIF</Label>
+				<Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=Configuration.FEIFversion}"/>
+
+				<Label Grid.Row="3" FontWeight="Bold">MM</Label>
+				<Label Grid.Row="3" Grid.Column="1" Content="{Binding Path=Configuration.CPversion}"/>
+
+			</Grid>
+		</Expander>
 	</Grid>
 </Window>
