@@ -130,6 +130,9 @@
 					<DataGridTextColumn
 						Header="rIP2"
 						Binding="{Binding Path=RemoteIpAddress2}" />
+					<DataGridTextColumn
+						Header="rPort"
+						Binding="{Binding Path=RemotePort}" />
 				</DataGrid.Columns>
 			</DataGrid>
 		</Expander>
@@ -144,6 +147,7 @@
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
 					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="*"/>
 				</Grid.RowDefinitions>
 			
 				<Label Grid.Row="0" FontWeight="Bold">SCTP</Label>
@@ -158,6 +162,12 @@
 				<Label Grid.Row="3" FontWeight="Bold">MM</Label>
 				<Label Grid.Row="3" Grid.Column="1" Content="{Binding Path=Configuration.CPversion}"/>
 
+				<DataGrid Grid.Row="3" Grid.ColumnSpan="2" ItemsSource="{Binding Path=Config.SCTPparams}">
+					<DataGrid.Columns>
+						<DataGridTextColumn Header="Parameter" Binding="{Binding Path=ParamName}"/>
+						<DataGridTextColumn Header="Value" Binding="{Binding Path=ParamValue}"/>						
+					</DataGrid.Columns>				
+				</DataGrid>
 			</Grid>
 		</Expander>
 	</Grid>

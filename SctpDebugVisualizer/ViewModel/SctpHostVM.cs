@@ -39,6 +39,7 @@ namespace SctpDebugVisualizer.ViewModel
 			Endpoints = new ObservableCollection<SctpEndpoint>(sctphost.Endpoints.Values);
 			Associations = new ObservableCollection<SctpAssociation>(sctphost.Associations.Values);
 			Clients = new ObservableCollection<ExtClient>(sctphost.SCTPIclients.Values);
+			Config = new ConfigVM(sctphost.Configuration);
 			RaisePropChange("Endpoints");
 			RaisePropChange("Associations");
 			RaisePropChange("Clients");
@@ -47,7 +48,8 @@ namespace SctpDebugVisualizer.ViewModel
 			RaisePropChange("BASEstate");
 			RaisePropChange("HOSTstate");
 			RaisePropChange("Board");			
-			RaisePropChange("Configuration");	
+			RaisePropChange("Configuration");
+			RaisePropChange("Config");
 			return true;
 		}
 		
@@ -63,6 +65,7 @@ namespace SctpDebugVisualizer.ViewModel
 		public BoardType Board {get{return sctphost.Board;}}
 		
 		public HostConfig Configuration {get {return sctphost.Configuration;}}
+		public ConfigVM Config { get;set;}
 		#endregion Properties
 		
 		#region INotifyPropertyChanged

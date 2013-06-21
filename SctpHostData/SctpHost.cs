@@ -278,42 +278,42 @@ namespace SctpHostData
 			@"(?:.*FEIF:\s+(?<FEIFv>CAA901892-FE_HD-R[\w|_]+).*\n)?"+
 			@".*SCTP:\s+(?<SCTPv>CAA901548-SCTP-R[\w|_]+).*\n"+
 			@".*\n.*\nCAA901548R(?<cfVer>[\w]+)\s+File Version Number.*\n"+
-			@".*(?<numOfAssocs>[0-9]+)\s+Number of Associations.*\n.*\n.*\n.*\n.*\n.*\n.*\n"+
-			@".*(?<ICMPst>[0-9]+)\s+ICMP Status.*\n.*\n.*\n.*\n.*\n"+
-			@".*(?<PortFrom>[0-9]+)\s+Port Range From.*\n"+
-			@".*(?<PortTo>[0-9]+)\s+.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n"+
-			@".*(?<AsRelBurstSize>[0-9]+)\s+Associations release burst size.*\n.*\n.*\n.*\n.*\n"+
-			@".*(?<UpdTimer64stat>[0-9]+)\s+Statistics 64bit Update Timer.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n"+
-			@".*(?<minRto>[0-9]+)\s+Minimum RTO.*\n"+
-			@".*(?<maxRto>[0-9]+)\s+Maximum RTO.*\n"+
-			@".*(?<initRto>[0-9]+)\s+Initial Retransmission time-out.*\n"+
-			@".*(?<rtoA>[0-9]+)\s+RTO Alpha.*\n"+
-			@".*(?<rtoB>[0-9]+)\s+RTO Beta.*\n"+
-			@".*(?<ValCOOKlife>[0-9]+)\s+Valid Cookie Life.*\n"+
-			@".*(?<IncCOOKlife>[0-9]+)\s+Allowed Increment Cookie Life.*\n"+
-			@".*(?<AMR>[0-9]+)\s+Assoc.Max.Rtx.*\n"+
-			@".*(?<PMR>[0-9]+)\s+Path.Max.Rtx.*\n"+
-			@".*(?<maxInitRtx>[0-9]+)\s+Maximum Initial Retransmissions.*\n"+
-			@".*(?<maxShDwnRtx>[0-9]+)\s+Maximum Shutdown Retransmissions.*\n"+
-			@".*(?<HBint>[0-9]+)\s+Heartbeat Interval.*\n.*\n"+
-			@".*(?<HBstatus>[0|1])\s+Heartbeat Status.*\n.*\n"+
-			@".*(?<InitHBint>[0-9]+)\s+Initial HB Interval.*\n.*\n"+
-			@".*(?<MIS>[0-9]+)\s+Maximum Incoming Streams.*\n"+
-			@".*(?<MOS>[0-9]+)\s+Maximum Outgoing Streams.*\n"+
-			@".*(?<M>[0-9]+)\s+M in.*\n"+
-			@".*(?<N>[0-9]+)\s+N in .*\n"+
-			@".*(?<Nperc>[0-9]+)\s+N Percentage.*\n"+
-			@".*(?<ARWND>[0-9]+)\s+Initial Rwnd.*\n.*\n.*\n.*\n"+
-			@".*(?<MaxBurst>[0-9]+)\s+Maximum Burst.*\n"+
-			@".*(?<SACKt>[0-9]+)\s+SACK Timer.*\n.*\n"+
-			@".*(?<BundlSt>[0|1])\s+Bundling Status.*\n"+
-			@".*(?<BundlT>[0-9]+)\s+Bundling Timer.*\n"+
-			@".*(?<PS>[0-9]+)\s+Path Selection.*\n"+
-			@".*(?<PMTU>[0-9]+)\s+PMTU in.*\n.*\n.*\n.*\n.*\n.*\n"+
-			@".*(?<minThr>[0-9]+)\s+Minimum Activate Threshold.*\n"+
-			@".*(?<maxThr>[0-9]+)\s+Maximum Activate Threshold.*\n.*\n"+
-			@".*(?<PFMR>[0-9]+)\s+Primary path max rtx.*\n.*\n.*\n"+
-			@".*(?<DSCP>[0-9]+)\s+DSCP.*\n";
+			@"(?<numOfAssocs>[0-9]+)\s+Number of Associations.*\n.*\n.*\n.*\n.*\n.*\n.*\n"+
+			@"(?<ICMPst>[0-9]+)\s+ICMP Status.*\n.*\n.*\n.*\n.*\n"+
+			@"(?<PortFrom>[0-9]+)\s+Port Range From.*\n"+
+			@"(?<PortTo>[0-9]+)\s+Port Range To.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n"+
+			@"(?<AsRelBurstSize>[0-9]+)\s+Associations release burst size.*\n.*\n.*\n.*\n.*\n"+
+			@"(?<UpdTimer64stat>[0-9]+)\s+Statistics 64bit Update Timer.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n"+
+			@"(?<minRto>[0-9]+)\s+Minimum RTO.*\n"+
+			@"(?<maxRto>[0-9]+)\s+Maximum RTO.*\n"+
+			@"(?<initRto>[0-9]+)\s+Initial Retransmission time-out.*\n"+
+			@"(?<rtoA>[0-9]+)\s+RTO Alpha.*\n"+
+			@"(?<rtoB>[0-9]+)\s+RTO Beta.*\n"+
+			@"(?<ValCOOKlife>[0-9]+)\s+Valid Cookie Life.*\n"+
+			@"(?<IncCOOKlife>[0-9]+)\s+Allowed Increment Cookie Life.*\n"+
+			@"(?<AMR>[0-9]+)\s+Assoc.Max.Rtx.*\n"+
+			@"(?<PMR>[0-9]+)\s+Path.Max.Rtx.*\n"+
+			@"(?<maxInitRtx>[0-9]+)\s+Maximum Initial Retransmissions.*\n"+
+			@"(?<maxShDwnRtx>[0-9]+)\s+Maximum Shutdown Retransmissions.*\n"+
+			@"(?<HBint>[0-9]+)\s+Heartbeat Interval in.*\n.*\n"+
+			@"(?<HBstatus>[0|1])\s+Heartbeat Status.*\n.*\n"+
+			@"(?<InitHBint>[0-9]+)\s+Initial HB Interval.*\n.*\n"+
+			@"(?<MIS>[0-9]+)\s+Maximum Incoming Streams.*\n"+
+			@"(?<MOS>[0-9]+)\s+Maximum Outgoing Streams.*\n"+
+			@"(?<M>[0-9]+)\s+M in.*\n"+
+			@"(?<N>[0-9]+)\s+N in .*\n"+
+			@"(?<Nperc>[0-9]+)\s+N Percentage.*\n"+
+			@"(?<ARWND>[0-9]+)\s+Initial Rwnd.*\n.*\n.*\n.*\n"+
+			@"(?<MaxBurst>[0-9]+)\s+Maximum Burst.*\n"+
+			@"(?<SACKt>[0-9]+)\s+SACK Timer.*\n.*\n"+
+			@"(?<BundlSt>[0|1])\s+Bundling Status.*\n"+
+			@"(?<BundlT>[0-9]+)\s+Bundling Timer.*\n"+
+			@"(?<PS>[0-9]+)\s+Path Selection.*\n"+
+			@"(?<PMTU>[0-9]+)\s+PMTU in.*\n.*\n.*\n.*\n.*\n.*\n"+
+			@"(?<minThr>[0-9]+)\s+Minimum Activate Threshold.*\n"+
+			@"(?<maxThr>[0-9]+)\s+Maximum Activate Threshold.*\n.*\n"+
+			@"(?<PFMR>[0-9]+)\s+Primary path max rtx.*\n.*\n.*\n"+
+			@"(?<DSCP>[0-9]+)\s+DSCP.*\n";
 		
 		#endregion
 		
