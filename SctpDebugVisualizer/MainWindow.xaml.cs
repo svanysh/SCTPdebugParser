@@ -28,6 +28,7 @@ namespace SctpDebugVisualizer
 	public partial class MainWindow : Window
 	{
 		SctpHostVM sctphost {get;set;}
+		protected SolidColorBrush filterBrush = new SolidColorBrush(Colors.GreenYellow);
 
 		public MainWindow()
 		{
@@ -68,24 +69,40 @@ namespace SctpDebugVisualizer
 		{
 			int clId = Convert.ToInt32((sender as Button).Tag);
 			sctphost.AssociationFilter = new AssociationFilter(AssocFilterType.ClientId, clId);
+			sctphost.EndpointFilter = new EndpointFilter(EndpointFilterType.ClientId, clId);
+			AssocFilterLabel.Background = filterBrush;
+			EndpointFilterLabel.Background = filterBrush;
+		}
+		
+		void M3onlyButton_Click(object sender, RoutedEventArgs e)
+		{			
+			sctphost.AssociationFilter = new AssociationFilter(AssocFilterType.M3);
+			sctphost.EndpointFilter = new EndpointFilter(EndpointFilterType.M3);
+			AssocFilterLabel.Background = filterBrush;
+			EndpointFilterLabel.Background = filterBrush;
 		}
 		
 		void EndpointButton_Click(object sender, RoutedEventArgs e)
 		{
 			int epId = Convert.ToInt32((sender as Button).Tag);
 			sctphost.AssociationFilter = new AssociationFilter(AssocFilterType.EndpointId, epId);
+			AssocFilterLabel.Background = filterBrush;			
 		}
 		
 		void RemPortButton_Click(object sender, RoutedEventArgs e)
 		{
 			int rPort = Convert.ToInt32((sender as Button).Tag);
 			sctphost.AssociationFilter = new AssociationFilter(AssocFilterType.RemotePort, rPort);
+			AssocFilterLabel.Background = filterBrush;
 		}
 		
 		void RemIpButton_Click(object sender, RoutedEventArgs e)
 		{
 			string rIp = (sender as Button).Tag as string;
 			sctphost.AssociationFilter = new AssociationFilter(rIp);
+			AssocFilterLabel.Background = filterBrush;
 		}
+		
+		
 	}
 }

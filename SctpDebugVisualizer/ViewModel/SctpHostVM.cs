@@ -24,6 +24,7 @@ namespace SctpDebugVisualizer.ViewModel
 	{
 		protected SctpHost sctphost;
 		protected AssociationFilter assocFilter = null;
+		protected EndpointFilter epFilter = null;
 		
 		public SctpHostVM()
 		{	
@@ -41,7 +42,7 @@ namespace SctpDebugVisualizer.ViewModel
 				MessageBox.Show(ex.Message, "Parsing error for file "+fileName);
 				return false;
 			}
-			Endpoints = new ObservableCollection<SctpEndpoint>(sctphost.Endpoints.Values);
+			EndpointFilter = new EndpointFilter(EndpointFilterType.All);
 			AssociationFilter = new AssociationFilter(AssocFilterType.All);
 			Clients = new ObservableCollection<ExtClient>(sctphost.SCTPIclients.Values);
 			Config = new ConfigVM(sctphost.Configuration);
@@ -71,6 +72,37 @@ namespace SctpDebugVisualizer.ViewModel
 		public HostConfig Configuration {get {return sctphost.Configuration;}}
 		public ConfigVM Config { get;set;}
 		
+		public EndpointFilter EndpointFilter
+		{
+			get { return epFilter;}
+			set 
+			{
+				epFilter = value;
+				if (epFilter == null || epFilter.FilterType == EndpointFilterType.All)
+				{
+					Endpoints = new ObservableCollection<SctpEndpoint>(sctphost.Endpoints.Values);
+				}
+				else switch(epFilter.FilterType)
+				{
+					case EndpointFilterType.ClientId:
+						Endpoints = new ObservableCollection<SctpEndpoint>(
+							from e in sctphost.Endpoints.Values
+							where e.ClientId == epFilter.ID
+							select e);
+						break;
+						
+					case EndpointFilterType.M3:
+						Endpoints = new ObservableCollection<SctpEndpoint>(
+							from e in sctphost.Endpoints.Values
+							where e.ClientId == null
+							select e);
+						break;
+				}
+				RaisePropChange("Endpoints");
+				RaisePropChange("EndpointFilter");
+			}
+		}
+		
 		public AssociationFilter AssociationFilter
 		{
 			get { return assocFilter;}
@@ -87,7 +119,14 @@ namespace SctpDebugVisualizer.ViewModel
 						Associations = new ObservableCollection<SctpAssociation>(
 							from a in sctphost.Associations.Values
 							where a.LocalEndpoint.ClientId == assocFilter.ID
-							select a);						
+							select a);
+						break;
+						
+					case AssocFilterType.M3:
+						Associations = new ObservableCollection<SctpAssociation>(
+							from a in sctphost.Associations.Values
+							where a.LocalEndpoint.ClientId == null
+							select a);
 						break;
 						
 					case AssocFilterType.EndpointId:

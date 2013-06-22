@@ -52,7 +52,8 @@ namespace SctpHostData
 			}
 			Endpoints = new Dictionary<int, SctpEndpoint>(128);
 			Associations = new Dictionary<int, SctpAssociation>(512);
-			SCTPIclients = new Dictionary<int, ExtClient>(8);
+			SCTPIclients = new Dictionary<int, ExtClient>(9);
+			//SCTPIclients.Add(Int32.MaxValue, new ExtClient(Int32.MaxValue,0,0));
 			Configuration = new HostConfig();
 			
 			StreamReader sr = File.OpenText(fileName);
@@ -409,7 +410,8 @@ namespace SctpHostData
 		{
 			foreach(Match m in Regex.Matches(input, extInfoPat))
 			{
-				try{
+				try
+				{
 					int id = Convert.ToInt32(m.Groups["id"].Value);
 					SCTPIclients.Add(id, new ExtClient(id, 
 					                                   Convert.ToInt32(m.Groups["pv"].Value),

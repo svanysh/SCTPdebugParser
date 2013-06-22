@@ -105,6 +105,7 @@
 					</DataGrid.RowDetailsTemplate>
 				</DataGrid>
 			</Expander>
+			<Button Click="M3onlyButton_Click">Show M3 objects only</Button>
 			<!-- Endpoints -->
 			<Expander >
 				<Expander.Header>
@@ -112,7 +113,10 @@
 						<Label>Endpoints [</Label>
 						<Label Content="{Binding Path=Endpoints.Count}" />
 						<Label>], </Label>
-						<Label x:Name="EpFilterLabel">All</Label>
+						<Label 
+							x:Name="EndpointFilterLabel"
+							Content="{Binding Path=EndpointFilter}" 
+							ToolTip="Filter for endpoints"/>
 					</StackPanel>
 				</Expander.Header>
 				<DataGrid x:Name="EndpointsDG" ItemsSource="{Binding Path=Endpoints}">
@@ -148,7 +152,10 @@
 					<Label
 						Content="{Binding Path=Associations.Count}" />
 					<Label>], </Label>
-					<Label Content="{Binding Path=AssociationFilter}"/>
+					<Label 
+						x:Name="AssocFilterLabel"
+						Content="{Binding Path=AssociationFilter}" 
+						ToolTip="Filter for associaciations"/>
 						
 				</StackPanel>
 			</Expander.Header>

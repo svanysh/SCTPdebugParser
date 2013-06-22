@@ -15,6 +15,7 @@ namespace SctpDebugVisualizer.ViewModel
 	{
 		All,
 		ClientId,
+		M3,
 		EndpointId,
 		RemotePort,
 		RemoteIpAddress,
@@ -52,6 +53,7 @@ namespace SctpDebugVisualizer.ViewModel
 			switch(FilterType)
 			{				
 				case AssocFilterType.ClientId: return "clientId="+ID.ToString();
+				case AssocFilterType.M3: return "M3";
 				case AssocFilterType.EndpointId: return "epID="+ID.ToString();
 				case AssocFilterType.RemotePort: return "rPort="+ID.ToString();
 				case AssocFilterType.All: return "All";
@@ -63,4 +65,36 @@ namespace SctpDebugVisualizer.ViewModel
 
 	}
 	
+	public enum EndpointFilterType
+	{
+		All,
+		ClientId,
+		M3
+	}
+	
+	public class EndpointFilter
+	{
+		public EndpointFilterType FilterType {get;set;}		
+		public int ID {get;set;}
+		public string IP1 {get;set;}
+		public string IP2 {get;set;}
+		
+		public EndpointFilter(EndpointFilterType type, int id=0)
+		{
+			FilterType = type;
+			ID = id;
+		}
+				
+		public override string ToString()
+		{
+			switch(FilterType)
+			{	
+				case EndpointFilterType.All: return "All";					
+				case EndpointFilterType.ClientId: return "clientId="+ID.ToString();
+				case EndpointFilterType.M3: return "M3";
+				default: return "Unknown";
+			}
+		}
+
+	}
 }
