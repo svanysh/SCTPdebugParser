@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Window
 	x:Class="SctpDebugVisualizer.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	Title="sctphost parser"
@@ -13,6 +13,17 @@
 			<Setter Property="RowBackground" Value="LightCyan"/>
 			<Setter Property="AlternatingRowBackground" Value="Azure"/>	
 			<Setter Property="CanUserResizeRows" Value="False"/>
+		</Style>
+		<Style TargetType="Expander">
+			<Setter Property="IsExpanded" Value="True"/>
+		</Style>	
+		<Style TargetType="Border">
+			<Setter Property="BorderBrush" Value="Black"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="CornerRadius" Value="3"/>
+			<Setter Property="Background" Value="Aquamarine"/>
+			<Setter Property="Padding" Value="2"/>
+			<Setter Property="Margin" Value="2"/>
 		</Style>
 	</Window.Resources>
 	<Grid>
@@ -72,38 +83,64 @@
 		</StackPanel>
 		<StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical">
 			<!-- Clients -->
-			<Expander IsExpanded="True" Header="SCTPI clients">
+			<Expander Header="SCTPI clients">
 				<DataGrid x:Name="ClientsDG" ItemsSource="{Binding Path=Clients, Mode=OneWay}">
 					<DataGrid.Columns>
 						<DataGridTextColumn Header="ID" Binding="{Binding Path=ID}"/>
 						<DataGridTextColumn Header="PV" Binding="{Binding Path=PV}"/>
 						<DataGridTextColumn Header="PID" Binding="{Binding Path=PID}"/>
 					</DataGrid.Columns>
+					<DataGrid.RowDetailsTemplate>
+						<DataTemplate>
+							<Border>
+								<StackPanel Orientation="Horizontal">
+									<Button 
+										Content="Filter"
+										Tag="{Binding Path=ID}"
+										ToolTip="Show endpoints and associations for this client only"
+										Click="ClientButton_Click"/>
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</DataGrid.RowDetailsTemplate>
 				</DataGrid>
 			</Expander>
-
-			<Expander IsExpanded="True">
-			<Expander.Header>
-				<StackPanel Orientation="Horizontal">
-					<Label>Endpoints [</Label>
-					<Label Content="{Binding Path=Endpoints.Count}" />
-					<Label>], </Label>
-					<Label x:Name="EpFilterLabel">All</Label>
-				</StackPanel>
-			</Expander.Header>
-			<DataGrid x:Name="EndpointsDG" ItemsSource="{Binding Path=Endpoints}">
-				<DataGrid.Columns>
-					<DataGridTextColumn Header="ID" Binding="{Binding Path=ID}" />
-					<DataGridTextColumn Header="Port" Binding="{Binding Path=Port}" />
-					<DataGridTextColumn Header="IP1" Binding="{Binding Path=IP1}" />
-					<DataGridTextColumn Header="IP2" Binding="{Binding Path=IP2}" />
-					<DataGridHyperlinkColumn Header="Client" Binding="{Binding Path=ClientId}" />
-				</DataGrid.Columns>
-			</DataGrid>
-		</Expander>
-		
+			<!-- Endpoints -->
+			<Expander >
+				<Expander.Header>
+					<StackPanel Orientation="Horizontal">
+						<Label>Endpoints [</Label>
+						<Label Content="{Binding Path=Endpoints.Count}" />
+						<Label>], </Label>
+						<Label x:Name="EpFilterLabel">All</Label>
+					</StackPanel>
+				</Expander.Header>
+				<DataGrid x:Name="EndpointsDG" ItemsSource="{Binding Path=Endpoints}">
+					<DataGrid.Columns>
+						<DataGridTextColumn Header="ID" Binding="{Binding Path=ID}" />
+						<DataGridTextColumn Header="Port" Binding="{Binding Path=Port}" />
+						<DataGridTextColumn Header="IP1" Binding="{Binding Path=IP1}" />
+						<DataGridTextColumn Header="IP2" Binding="{Binding Path=IP2}" />
+						<DataGridTextColumn Header="Client" Binding="{Binding Path=ClientId}" />
+					</DataGrid.Columns>
+					<DataGrid.RowDetailsTemplate>
+						<DataTemplate>
+							<Border>
+								<StackPanel Orientation="Horizontal">
+									<Button 
+										Content="association on me"
+										Tag="{Binding Path=ID}"
+										ToolTip="Show only associations on this enpdoint"
+										Click="EndpointButton_Click"/>
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</DataGrid.RowDetailsTemplate>
+				</DataGrid>
+			</Expander>		
 		</StackPanel>
-		<Expander Grid.Row="1" Grid.Column="1" IsExpanded="True">
+		<!-- Associations -->
+		<Expander Grid.Row="1" Grid.Column="1">
 			<Expander.Header>
 				<StackPanel
 					Orientation="Horizontal">
@@ -111,64 +148,75 @@
 					<Label
 						Content="{Binding Path=Associations.Count}" />
 					<Label>], </Label>
-					<Label
-						x:Name="AssocFilterLabel">All</Label>
+					<Label Content="{Binding Path=AssociationFilter}"/>
+						
 				</StackPanel>
 			</Expander.Header>
-			<DataGrid x:Name="AssociationsDG" ItemsSource="{Binding Path=Associations, Mode=OneWay}"
-				MouseDoubleClick="AssociationsDG_MouseDoubleClick">
-				<DataGrid.Columns>
-					<DataGridTextColumn
-						Header="ID"
-						Binding="{Binding Path=ID}" IsReadOnly="True"/>
-					<DataGridHyperlinkColumn
-						Header="epID"
-						Binding="{Binding Path=LocalEndpoint.ID}" />
-					<DataGridTextColumn
-						Header="rIP1"
-						Binding="{Binding Path=RemoteIpAddress1}" />
-					<DataGridTextColumn
-						Header="rIP2"
-						Binding="{Binding Path=RemoteIpAddress2}" />
-					<DataGridTextColumn
-						Header="rPort"
-						Binding="{Binding Path=RemotePort}" />
-				</DataGrid.Columns>
+				<DataGrid x:Name="AssociationsDG" ItemsSource="{Binding Path=Associations, Mode=OneWay}"
+					MouseDoubleClick="AssociationsDG_MouseDoubleClick">
+					<DataGrid.Columns>
+						<DataGridTextColumn Header="ID" Binding="{Binding Path=ID}" IsReadOnly="True"/>
+						<DataGridTextColumn Header="epID" Binding="{Binding Path=LocalEndpoint.ID}" />
+						<DataGridTextColumn Header="rIP1" Binding="{Binding Path=RemoteIpAddress1}" />
+						<DataGridTextColumn Header="rIP2" Binding="{Binding Path=RemoteIpAddress2}" />
+						<DataGridTextColumn Header="rPort" Binding="{Binding Path=RemotePort}" />
+					</DataGrid.Columns>
+					<DataGrid.RowDetailsTemplate>
+						<DataTemplate>
+							<Border>
+								<StackPanel Orientation="Horizontal">
+									<Button 
+										Content="same rPort"
+										Tag="{Binding Path=RemotePort}"
+										ToolTip="Show only associations with same remote port"
+										Click="RemPortButton_Click"/>
+									<Button 
+										Content="same rPort"
+										Tag="{Binding Path=RemoteIpAddress1}"
+										ToolTip="Show only associations with such IP address"
+										Click="RemIpButton_Click"/>
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</DataGrid.RowDetailsTemplate>
 			</DataGrid>
 		</Expander>
-		<Expander Grid.Column="2" Grid.Row="1" Header="BASE labels" IsExpanded="True">
-			<Grid>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="Auto"/>
-					<ColumnDefinition Width="Auto"/>
-				</Grid.ColumnDefinitions>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="*"/>
-				</Grid.RowDefinitions>
-			
-				<Label Grid.Row="0" FontWeight="Bold">SCTP</Label>
-				<Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=Configuration.SCTPversion}"/>
-
-				<Label Grid.Row="1" FontWeight="Bold">CP</Label>
-				<Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=Configuration.CPversion}"/>
-
-				<Label Grid.Row="2" FontWeight="Bold">FEIF</Label>
-				<Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=Configuration.FEIFversion}"/>
-
-				<Label Grid.Row="3" FontWeight="Bold">MM</Label>
-				<Label Grid.Row="3" Grid.Column="1" Content="{Binding Path=Configuration.CPversion}"/>
-
+		<!-- Configuration -->
+		<StackPanel Orientation="Vertical" Grid.Column="2" Grid.Row="1">
+			<Expander Header="BASE labels" IsExpanded="False">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="Auto"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>						
+					</Grid.RowDefinitions>
+				
+					<Label Grid.Row="0" FontWeight="Bold">SCTP</Label>
+					<Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=Configuration.SCTPversion}"/>
+	
+					<Label Grid.Row="1" FontWeight="Bold">CP</Label>
+					<Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=Configuration.CPversion}"/>
+	
+					<Label Grid.Row="2" FontWeight="Bold">FEIF</Label>
+					<Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=Configuration.FEIFversion}"/>
+	
+					<Label Grid.Row="3" FontWeight="Bold">MM</Label>
+					<Label Grid.Row="3" Grid.Column="1" Content="{Binding Path=Configuration.CPversion}"/>
+				</Grid>
+			</Expander>
+			<Expander Header="SCTP config">
 				<DataGrid Grid.Row="3" Grid.ColumnSpan="2" ItemsSource="{Binding Path=Config.SCTPparams}">
-					<DataGrid.Columns>
-						<DataGridTextColumn Header="Parameter" Binding="{Binding Path=ParamName}"/>
-						<DataGridTextColumn Header="Value" Binding="{Binding Path=ParamValue}"/>						
-					</DataGrid.Columns>				
-				</DataGrid>
-			</Grid>
-		</Expander>
+						<DataGrid.Columns>
+							<DataGridTextColumn Header="Parameter" Binding="{Binding Path=ParamName}"/>
+							<DataGridTextColumn Header="Value" Binding="{Binding Path=ParamValue}"/>						
+						</DataGrid.Columns>				
+					</DataGrid>
+			</Expander>
+		</StackPanel>
 	</Grid>
 </Window>

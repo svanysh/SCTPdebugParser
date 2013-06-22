@@ -9,17 +9,21 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows;
+using System.Linq;
 
 using SctpHostData;
 
 namespace SctpDebugVisualizer.ViewModel
 {
+	
 	/// <summary>
 	/// Description of SctpHostVM.
 	/// </summary>
 	public class SctpHostVM: INotifyPropertyChanged
 	{
 		protected SctpHost sctphost;
+		protected AssociationFilter assocFilter = null;
 		
 		public SctpHostVM()
 		{	
@@ -30,18 +34,18 @@ namespace SctpDebugVisualizer.ViewModel
 		{
 			try
 			{
-			sctphost = new SctpHost(fileName);
+				sctphost = new SctpHost(fileName);
 			}
-			catch
+			catch(Exception ex)
 			{
+				MessageBox.Show(ex.Message, "Parsing error for file "+fileName);
 				return false;
 			}
 			Endpoints = new ObservableCollection<SctpEndpoint>(sctphost.Endpoints.Values);
-			Associations = new ObservableCollection<SctpAssociation>(sctphost.Associations.Values);
+			AssociationFilter = new AssociationFilter(AssocFilterType.All);
 			Clients = new ObservableCollection<ExtClient>(sctphost.SCTPIclients.Values);
 			Config = new ConfigVM(sctphost.Configuration);
-			RaisePropChange("Endpoints");
-			RaisePropChange("Associations");
+			RaisePropChange("Endpoints");			
 			RaisePropChange("Clients");
 			RaisePropChange("RpuId");
 			RaisePropChange("CpId");
@@ -66,6 +70,62 @@ namespace SctpDebugVisualizer.ViewModel
 		
 		public HostConfig Configuration {get {return sctphost.Configuration;}}
 		public ConfigVM Config { get;set;}
+		
+		public AssociationFilter AssociationFilter
+		{
+			get { return assocFilter;}
+			set 
+			{
+				assocFilter = value;
+				if (assocFilter == null || assocFilter.FilterType == AssocFilterType.All)
+				{
+					Associations = new ObservableCollection<SctpAssociation>(sctphost.Associations.Values);					
+				}
+				else switch(assocFilter.FilterType)
+				{
+					case AssocFilterType.ClientId:
+						Associations = new ObservableCollection<SctpAssociation>(
+							from a in sctphost.Associations.Values
+							where a.LocalEndpoint.ClientId == assocFilter.ID
+							select a);						
+						break;
+						
+					case AssocFilterType.EndpointId:
+						Associations = new ObservableCollection<SctpAssociation>(
+							from a in sctphost.Associations.Values
+							where a.LocalEndpoint.ID == assocFilter.ID
+							select a);
+						break;
+						
+					case AssocFilterType.RemotePort:
+						Associations = new ObservableCollection<SctpAssociation>(
+							from a in sctphost.Associations.Values
+							where a.RemotePort == assocFilter.ID
+							select a);
+						break;
+						
+					case AssocFilterType.RemoteIpAddress:
+						Associations = new ObservableCollection<SctpAssociation>(
+							from a in sctphost.Associations.Values
+							where a.RemoteIpAddress1 == assocFilter.IP1
+								|| a.RemoteIpAddress2 == assocFilter.IP1
+							select a);
+						break;
+						
+					case AssocFilterType.RemoteIpAddresses:
+						Associations = new ObservableCollection<SctpAssociation>(
+							from a in sctphost.Associations.Values
+							where (a.RemoteIpAddress1 == assocFilter.IP1
+							       && a.RemoteIpAddress2 == assocFilter.IP2)
+								|| (a.RemoteIpAddress1 == assocFilter.IP2
+							       && a.RemoteIpAddress2 == assocFilter.IP1)
+							select a);
+						break;
+				}
+				RaisePropChange("Associations");
+				RaisePropChange("AssociationFilter");
+			}
+		}
 		#endregion Properties
 		
 		#region INotifyPropertyChanged

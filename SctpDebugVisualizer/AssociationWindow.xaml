@@ -55,7 +55,7 @@
 			Grid.ColumnSpan="2"
 			FontWeight="Bold"
 			HorizontalAlignment="Center">Counters</Label>
-		<CheckBox Grid.Row="1" Grid.Column="2" IsChecked="{Binding Path=IsZeroCountersShown}" Content="(Show 0)"/>
+		<CheckBox Grid.Row="1" Grid.Column="2" IsChecked="{Binding Path=IsZeroCountersShown}" Content="(Show with value=0)"/>
 		<!-- counters -->
 		<DataGrid Grid.Row="2" Grid.ColumnSpan="2"
 				ItemsSource="{Binding Path=Counters, Mode=OneWay}"

@@ -63,5 +63,29 @@ namespace SctpDebugVisualizer
 			asWnd.Show();		
 			
 		}
+		
+		void ClientButton_Click(object sender, RoutedEventArgs e)
+		{
+			int clId = Convert.ToInt32((sender as Button).Tag);
+			sctphost.AssociationFilter = new AssociationFilter(AssocFilterType.ClientId, clId);
+		}
+		
+		void EndpointButton_Click(object sender, RoutedEventArgs e)
+		{
+			int epId = Convert.ToInt32((sender as Button).Tag);
+			sctphost.AssociationFilter = new AssociationFilter(AssocFilterType.EndpointId, epId);
+		}
+		
+		void RemPortButton_Click(object sender, RoutedEventArgs e)
+		{
+			int rPort = Convert.ToInt32((sender as Button).Tag);
+			sctphost.AssociationFilter = new AssociationFilter(AssocFilterType.RemotePort, rPort);
+		}
+		
+		void RemIpButton_Click(object sender, RoutedEventArgs e)
+		{
+			string rIp = (sender as Button).Tag as string;
+			sctphost.AssociationFilter = new AssociationFilter(rIp);
+		}
 	}
 }

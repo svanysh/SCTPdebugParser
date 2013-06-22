@@ -273,9 +273,9 @@ namespace SctpHostData
 		///...
 		/// </example>
 		const string sctpCFpat = 
-			@".*BASE labels.*\n.*CP:\s+(?<CPv>CAA20129-CP-R[\w|_]+).*\n"+
-			@".*MM:\s+(?<MMv>CAA20130-MM-R[\w|_]+).*\n"+
-			@"(?:.*FEIF:\s+(?<FEIFv>CAA901892-FE_HD-R[\w|_]+).*\n)?"+
+			@"BASE labels.*\n.*CP:\s+(?<CPv>CAA20129-CP-R[\w|_]+).*\n"+
+			@"\s*MM:\s+(?<MMv>CAA20130-MM-R[\w|_]+).*\n"+
+			@"(?:\s*FEIF:\s+(?<FEIFv>CAA901892-FE_HD-R[\w|_]+).*\n)?"+
 			@".*SCTP:\s+(?<SCTPv>CAA901548-SCTP-R[\w|_]+).*\n"+
 			@".*\n.*\nCAA901548R(?<cfVer>[\w]+)\s+File Version Number.*\n"+
 			@"(?<numOfAssocs>[0-9]+)\s+Number of Associations.*\n.*\n.*\n.*\n.*\n.*\n.*\n"+
@@ -284,7 +284,7 @@ namespace SctpHostData
 			@"(?<PortTo>[0-9]+)\s+Port Range To.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n"+
 			@"(?<AsRelBurstSize>[0-9]+)\s+Associations release burst size.*\n.*\n.*\n.*\n.*\n"+
 			@"(?<UpdTimer64stat>[0-9]+)\s+Statistics 64bit Update Timer.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n"+
-			@"(?<minRto>[0-9]+)\s+Minimum RTO.*\n"+
+			@"(?:.*\n)?(?<minRto>[0-9]+)\s+Minimum RTO.*\n"+
 			@"(?<maxRto>[0-9]+)\s+Maximum RTO.*\n"+
 			@"(?<initRto>[0-9]+)\s+Initial Retransmission time-out.*\n"+
 			@"(?<rtoA>[0-9]+)\s+RTO Alpha.*\n"+

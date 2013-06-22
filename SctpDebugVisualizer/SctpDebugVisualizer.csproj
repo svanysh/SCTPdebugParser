@@ -76,6 +76,7 @@
     </Compile>
     <Compile Include="ViewModel\AssociationVM.cs" />
     <Compile Include="ViewModel\ConfigVM.cs" />
+    <Compile Include="ViewModel\Filters.cs" />
     <Compile Include="ViewModel\SctpHostVM.cs" />
   </ItemGroup>
   <ItemGroup>
