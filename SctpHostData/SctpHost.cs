@@ -499,10 +499,12 @@ namespace SctpHostData
 						
 					
 					int aId = Convert.ToInt32(m.Groups["assocId"].Value);
+					int ulpKey = Convert.ToInt32(m.Groups["ulpKey"].Value);
+					int dscp = Convert.ToInt32(m.Groups["dscp"].Value);
 					this.Associations.Add(aId,
 					                      new SctpAssociation(aId, EPforAssoc[aId],
 					                                          Convert.ToUInt16(m.Groups["rPort"].Value),
-					                                          pathes));
+					                                          pathes, ulpKey,dscp));
 						                                               
 				}
 				catch

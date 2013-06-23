@@ -53,6 +53,8 @@ namespace SctpDebugVisualizer.ViewModel
 			RaisePropChange("LocalIpAddress2");
 			RaisePropChange("RemoteIpAddress1");
 			RaisePropChange("RemoteIpAddress2");
+			RaisePropChange("ULPkey");
+			RaisePropChange("DSCP");
 			RaisePropChange("Counters");			
 		}
 		
@@ -66,7 +68,9 @@ namespace SctpDebugVisualizer.ViewModel
 		
 		public int RemotePort {get {return assoc.RemotePort;}}		
 		public String RemoteIpAddress1 {get{return assoc.RemoteIpAddress1;}}
-		public String RemoteIpAddress2 {get{return assoc.RemoteIpAddress2;}}
+		public String RemoteIpAddress2 {get{return assoc.RemoteIpAddress2;}}		
+		public int ULPkey {get {return assoc.ULPkey;}}
+		public int DSCP {get {return assoc.DSCP;}}
 		
 		public String AssocName
 		{

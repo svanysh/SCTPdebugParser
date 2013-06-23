@@ -35,55 +35,38 @@
 			<ColumnDefinition Width="*" />
 			<ColumnDefinition Width="*" />
 			<ColumnDefinition Width="*" />
-		</Grid.ColumnDefinitions>
+		</Grid.ColumnDefinitions>		
 		<StackPanel
 			Orientation="Horizontal"
 			Grid.ColumnSpan="3">
+			<StackPanel.Background>
+				<LinearGradientBrush StartPoint="0,0" EndPoint="1.5,1">
+					<GradientStop Color="LightSlateGray" Offset="0"/>
+					<GradientStop Color="Black" Offset="2"/>
+				</LinearGradientBrush>
+			</StackPanel.Background>
 			<Button
+				Background="Coral"
+				BorderBrush="BlueViolet"
+				BorderThickness="2"
 				ToolTip="open file with one output of sctphost -all coli command"
 				Height="40"
 				Name="button1"
 				Click="Load_Click">Load</Button>
-			<Grid>
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition />
-					<ColumnDefinition />
-					<ColumnDefinition />
-					<ColumnDefinition />
-				</Grid.ColumnDefinitions>
-				<Grid.RowDefinitions>
-					<RowDefinition />
-					<RowDefinition />
-				</Grid.RowDefinitions>
-				<Label
-					Grid.Row="0"
-					Grid.Column="0"
-					FontWeight="Bold">RPU id</Label>
-				<Label
-					Grid.Row="0"
-					Grid.Column="1"
-					Content="{Binding Path=RpuId}" />
-				<Label
-					Grid.Row="0"
-					Grid.Column="2"
-					FontWeight="Bold">CP id</Label>
-				<Label
-					Grid.Row="0"
-					Grid.Column="3"
-					Content="{Binding Path=CpId}" />
-				<Label
-					Grid.Row="2"
-					Grid.Column="0"
-					FontWeight="Bold">Board</Label>
-				<Label
-					Grid.Row="2"
-					Grid.Column="1"
-					Content="{Binding Path=Board}" />
-			</Grid>
+		
+				<Label FontWeight="Bold">RPU id=</Label>
+				<Label Content="{Binding Path=RpuId}" />
+				
+				<Label FontWeight="Bold">CP id=</Label>
+				<Label Content="{Binding Path=CpId}" />
+				
+				<Label FontWeight="Bold">Board=</Label>
+				<Label Content="{Binding Path=Board}" />
+				<Button Click="ShowAllButton_Click">Clear filters(show all)</Button>
 		</StackPanel>
 		<StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical">
 			<!-- Clients -->
-			<Expander Header="SCTPI clients">
+			<Expander Header="SCTPI clients" Background="CornflowerBlue">
 				<DataGrid x:Name="ClientsDG" ItemsSource="{Binding Path=Clients, Mode=OneWay}">
 					<DataGrid.Columns>
 						<DataGridTextColumn Header="ID" Binding="{Binding Path=ID}"/>
@@ -107,7 +90,7 @@
 			</Expander>
 			<Button Click="M3onlyButton_Click">Show M3 objects only</Button>
 			<!-- Endpoints -->
-			<Expander >
+			<Expander Background="DarkSeaGreen">
 				<Expander.Header>
 					<StackPanel Orientation="Horizontal">
 						<Label>Endpoints [</Label>
@@ -144,7 +127,7 @@
 			</Expander>		
 		</StackPanel>
 		<!-- Associations -->
-		<Expander Grid.Row="1" Grid.Column="1">
+		<Expander Grid.Row="1" Grid.Column="1" Background="IndianRed">
 			<Expander.Header>
 				<StackPanel
 					Orientation="Horizontal">
@@ -178,7 +161,7 @@
 										ToolTip="Show only associations with same remote port"
 										Click="RemPortButton_Click"/>
 									<Button 
-										Content="same rPort"
+										Content="same remIp"
 										Tag="{Binding Path=RemoteIpAddress1}"
 										ToolTip="Show only associations with such IP address"
 										Click="RemIpButton_Click"/>

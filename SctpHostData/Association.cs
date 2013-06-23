@@ -31,7 +31,6 @@ namespace SctpHostData
 	{
 		#region Properties
 		
-		
 		public int ID {get;set;}
 
 		#region Extended Propterties
@@ -98,11 +97,21 @@ namespace SctpHostData
 				
 		public List<IpPath> Pathes { get; internal set;}
 		
+		public int ULPkey {get; internal set;}
+		
+		public int DSCP {get; internal set;}
+		
 		public AssocCounters counters;
 		
 		#endregion Properties
 				
-		internal SctpAssociation(int assocId, SctpEndpoint localEp, UInt16 rPort, List<IpPath> pathes)
+		internal SctpAssociation(
+			int assocId, 
+			SctpEndpoint localEp,
+			UInt16 rPort,
+			List<IpPath> pathes, 
+			int ulpKey,
+			int dscp)
 		{
 			if (localEp == null)
 				throw new NullReferenceException("null Enpoint parameter passed to constructor of Asscoiation");
@@ -117,7 +126,9 @@ namespace SctpHostData
 				this.RemoteIpAddress2 = pathes[1].remoteAddress;
 			else if (pathes.Count > 3 && pathes[2].remoteAddress != this.RemoteIpAddress1)
 				this.RemoteIpAddress2 = pathes[2].remoteAddress;
-			
+			this.ULPkey = ulpKey;
+			this.DSCP = dscp;
+				
 			localEp.Associations.Add(this);
 		}
 		

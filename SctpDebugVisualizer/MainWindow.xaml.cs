@@ -29,6 +29,7 @@ namespace SctpDebugVisualizer
 	{
 		SctpHostVM sctphost {get;set;}
 		protected SolidColorBrush filterBrush = new SolidColorBrush(Colors.GreenYellow);
+		protected Brush defaultBrush;
 
 		public MainWindow()
 		{
@@ -36,6 +37,7 @@ namespace SctpDebugVisualizer
 			sctphost = new SctpHostVM();
 			
 			this.DataContext = sctphost;
+			defaultBrush = AssocFilterLabel.Background;
 		}
 		
 		void Load_Click(object sender, RoutedEventArgs e)
@@ -43,8 +45,13 @@ namespace SctpDebugVisualizer
 			OpenFileDialog ofd = new OpenFileDialog();
 			if (ofd.ShowDialog().Value)
 			{
-				sctphost.Load(ofd.FileName);
-			}			
+				if (sctphost.Load(ofd.FileName))
+					this.Title = "sctphost parser for "+ofd.FileName;
+				else
+					this.Title = "sctphost parser";
+			}
+			AssocFilterLabel.Background = defaultBrush;
+			EndpointFilterLabel.Background = defaultBrush;
 		}
 		
 		public Dictionary<int, AssociationWindow> AssocWindows
@@ -101,6 +108,14 @@ namespace SctpDebugVisualizer
 			string rIp = (sender as Button).Tag as string;
 			sctphost.AssociationFilter = new AssociationFilter(rIp);
 			AssocFilterLabel.Background = filterBrush;
+		}
+		
+		void ShowAllButton_Click(object sender, RoutedEventArgs e)
+		{
+			sctphost.AssociationFilter = new AssociationFilter(AssocFilterType.All);
+			sctphost.EndpointFilter = new EndpointFilter(EndpointFilterType.All);
+			AssocFilterLabel.Background = defaultBrush;
+			EndpointFilterLabel.Background = defaultBrush;
 		}
 		
 		
