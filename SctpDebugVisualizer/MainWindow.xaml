@@ -25,6 +25,9 @@
 			<Setter Property="Padding" Value="2"/>
 			<Setter Property="Margin" Value="2"/>
 		</Style>
+		<Style TargetType="FlowDocumentScrollViewer">
+			<Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
+		</Style>
 	</Window.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
@@ -49,20 +52,25 @@
 				Background="Coral"
 				BorderBrush="BlueViolet"
 				BorderThickness="2"
-				ToolTip="open file with one output of sctphost -all coli command"
-				Height="40"
-				Name="button1"
+				ToolTip="open file with one output of sctphost -all coli command"				
+				Name="L_oad"
 				Click="Load_Click">Load</Button>
-		
-				<Label FontWeight="Bold">RPU id=</Label>
-				<Label Content="{Binding Path=RpuId}" />
-				
-				<Label FontWeight="Bold">CP id=</Label>
-				<Label Content="{Binding Path=CpId}" />
-				
-				<Label FontWeight="Bold">Board=</Label>
-				<Label Content="{Binding Path=Board}" />
-				<Button Click="ShowAllButton_Click">Clear filters(show all)</Button>
+			<Button Click="ShowAllButton_Click">Clear filters(show all)</Button>
+			<FlowDocumentScrollViewer>
+				<FlowDocument FontFamily="Arial" FontSize="12">
+					<Paragraph>
+						<Run FontWeight="Bold">RPU id=</Run>
+						<Run Text="{Binding Path=CpId, Mode=OneWay}" />
+						
+						<Run FontWeight="Bold">CP id=</Run>
+						<Run Text="{Binding Path=CpId, Mode=OneWay}" />
+						
+						<Run FontWeight="Bold">Board=</Run>
+						<Run Text="{Binding Path=Board, Mode=OneWay}" />
+					</Paragraph>
+
+				</FlowDocument>
+			</FlowDocumentScrollViewer>				
 		</StackPanel>
 		<StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical">
 			<!-- Clients -->
@@ -154,7 +162,7 @@
 					<DataGrid.RowDetailsTemplate>
 						<DataTemplate>
 							<Border>
-								<StackPanel Orientation="Horizontal">
+								<DockPanel IsManipulationEnabled="True">									
 									<Button 
 										Content="same rPort"
 										Tag="{Binding Path=RemotePort}"
@@ -165,7 +173,7 @@
 										Tag="{Binding Path=RemoteIpAddress1}"
 										ToolTip="Show only associations with such IP address"
 										Click="RemIpButton_Click"/>
-								</StackPanel>
+								</DockPanel>
 							</Border>
 						</DataTemplate>
 					</DataGrid.RowDetailsTemplate>
@@ -174,30 +182,26 @@
 		<!-- Configuration -->
 		<StackPanel Orientation="Vertical" Grid.Column="2" Grid.Row="1">
 			<Expander Header="BASE labels" IsExpanded="False">
-				<Grid>
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="Auto"/>
-						<ColumnDefinition Width="Auto"/>
-					</Grid.ColumnDefinitions>
-					<Grid.RowDefinitions>
-						<RowDefinition Height="Auto"/>
-						<RowDefinition Height="Auto"/>
-						<RowDefinition Height="Auto"/>
-						<RowDefinition Height="Auto"/>						
-					</Grid.RowDefinitions>
-				
-					<Label Grid.Row="0" FontWeight="Bold">SCTP</Label>
-					<Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=Configuration.SCTPversion}"/>
-	
-					<Label Grid.Row="1" FontWeight="Bold">CP</Label>
-					<Label Grid.Row="1" Grid.Column="1" Content="{Binding Path=Configuration.CPversion}"/>
-	
-					<Label Grid.Row="2" FontWeight="Bold">FEIF</Label>
-					<Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=Configuration.FEIFversion}"/>
-	
-					<Label Grid.Row="3" FontWeight="Bold">MM</Label>
-					<Label Grid.Row="3" Grid.Column="1" Content="{Binding Path=Configuration.CPversion}"/>
-				</Grid>
+				<FlowDocumentScrollViewer>
+				<FlowDocument FontFamily="Arial" FontSize="12">
+					<Paragraph>
+						<Run FontWeight="Bold">SCTP</Run>
+						<Run Text="{Binding Path=Configuration.SCTPversion, Mode=OneWay}"/>
+					</Paragraph>
+					<Paragraph>
+						<Run FontWeight="Bold">CP</Run>
+						<Run Text="{Binding Path=Configuration.CPversion, Mode=OneWay}"/>
+					</Paragraph>
+					<Paragraph>					
+						<Run FontWeight="Bold">FEIF</Run>
+						<Run Text="{Binding Path=Configuration.FEIFversion, Mode=OneWay}"/>
+					</Paragraph>
+					<Paragraph>					
+						<Run FontWeight="Bold">MM</Run>
+						<Run Text="{Binding Path=Configuration.CPversion, Mode=OneWay}"/>
+					</Paragraph>
+				</FlowDocument>
+				</FlowDocumentScrollViewer>
 			</Expander>
 			<Expander Header="SCTP config">
 				<DataGrid Grid.Row="3" Grid.ColumnSpan="2" ItemsSource="{Binding Path=Config.SCTPparams}">

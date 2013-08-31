@@ -20,8 +20,11 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		<FlowDocumentScrollViewer>
+		<FlowDocumentScrollViewer VerticalScrollBarVisibility="Hidden">
 			<FlowDocument FontFamily="Arial" FontSize="12">
+				<Paragraph>
+					<Run Text="{Binding Path=AssocName, Mode=OneWay}"/>
+				</Paragraph>
 				<Table CellSpacing="10">
 					<Table.Columns>
 						<TableColumn Width="Auto"/>
@@ -69,7 +72,7 @@
 				<Paragraph>
 					<Run>DSCP</Run>
 					<Run Text="{Binding Path=DSCP, Mode=OneWay}"/>
-				</Paragraph>
+				</Paragraph>				
 			</FlowDocument>
 		</FlowDocumentScrollViewer>	
 

@@ -77,6 +77,7 @@ namespace SctpDebugVisualizer.ViewModel
 			get { return epFilter;}
 			set 
 			{
+				if (sctphost == null) return;
 				epFilter = value;
 				if (epFilter == null || epFilter.FilterType == EndpointFilterType.All)
 				{
@@ -108,6 +109,7 @@ namespace SctpDebugVisualizer.ViewModel
 			get { return assocFilter;}
 			set 
 			{
+				if (sctphost == null) return;
 				assocFilter = value;
 				if (assocFilter == null || assocFilter.FilterType == AssocFilterType.All)
 				{

@@ -79,7 +79,7 @@ namespace SctpDebugVisualizer.ViewModel
 				StringBuilder sb = new StringBuilder(assoc.LocalIpAddress1);
 				if (assoc.LocalIpAddress2 != "")
 					sb.Append(";").Append(assoc.LocalIpAddress2);
-				sb.Append(":").Append(assoc.LocalPort).Append("-");
+				sb.Append(":").Append(assoc.LocalPort).Append(" - ");
 				sb.Append(assoc.RemoteIpAddress1);
 				if (assoc.RemoteIpAddress2!= "")
 					sb.Append(";").Append(assoc.RemoteIpAddress2);

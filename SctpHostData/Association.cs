@@ -70,6 +70,11 @@ namespace SctpHostData
 			}
 		}
 	
+		public String OneLinePresentation
+		{
+			get{return this.ToString();}
+		}
+		
 		#endregion Extended Propterties
 		
 		public UInt16 RemotePort
