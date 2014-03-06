@@ -20,10 +20,10 @@ namespace SctpDebugVisualizer.ViewModel
 	public class CounterVM
 	{
 		public string CounterName {get;set;}
-		public int CounterValue {get;set;}
+		public UInt64 CounterValue {get;set;}
 		public string Description {get;set;}
 		
-		public CounterVM(string name, int val, string description="")
+		public CounterVM(string name, UInt64 val, string description="")
 		{
 			this.CounterName = name;
 			this.CounterValue = val;
@@ -79,7 +79,7 @@ namespace SctpDebugVisualizer.ViewModel
 				StringBuilder sb = new StringBuilder(assoc.LocalIpAddress1);
 				if (assoc.LocalIpAddress2 != "")
 					sb.Append(";").Append(assoc.LocalIpAddress2);
-				sb.Append(":").Append(assoc.LocalPort).Append(" - ");
+				sb.Append(":").Append(assoc.LocalPort).Append("-");
 				sb.Append(assoc.RemoteIpAddress1);
 				if (assoc.RemoteIpAddress2!= "")
 					sb.Append(";").Append(assoc.RemoteIpAddress2);

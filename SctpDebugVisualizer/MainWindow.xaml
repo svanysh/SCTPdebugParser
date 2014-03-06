@@ -59,16 +59,14 @@
 			<FlowDocumentScrollViewer>
 				<FlowDocument FontFamily="Arial" FontSize="12">
 					<Paragraph>
-						<Run FontWeight="Bold">RPU id=</Run>
-						<Run Text="{Binding Path=CpId, Mode=OneWay}" />
-						
-						<Run FontWeight="Bold">CP id=</Run>
-						<Run Text="{Binding Path=CpId, Mode=OneWay}" />
-						
-						<Run FontWeight="Bold">Board=</Run>
 						<Run Text="{Binding Path=Board, Mode=OneWay}" />
+						
+						<Run FontWeight="Bold">RPU</Run>
+						<Run Text="{Binding Path=CpId, Mode=OneWay}" />
+						
+						<Run FontWeight="Bold">CP</Run>
+						<Run Text="{Binding Path=CpId, Mode=OneWay}" />
 					</Paragraph>
-
 				</FlowDocument>
 			</FlowDocumentScrollViewer>				
 		</StackPanel>
