@@ -25,7 +25,7 @@ namespace consoleTester
 						
 			/*StreamReader sr = File.OpenText("input.txt");					
 			string input = sr.ReadToEnd();*/
-			SctpHost host = new SctpHost("input.txt");
+			SctpHost host = SctpHostColiParser.Parse("input.txt");
 			Console.WriteLine("ENDPOINTS");
 			foreach(var ep in host.Endpoints)
 			{

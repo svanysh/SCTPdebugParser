@@ -35,7 +35,7 @@ namespace SctpDebugVisualizer.ViewModel
 		{
 			try
 			{
-				sctphost = new SctpHost(fileName);
+				sctphost = SctpHostColiParser.Parse(fileName);
 			}
 			catch(Exception ex)
 			{
