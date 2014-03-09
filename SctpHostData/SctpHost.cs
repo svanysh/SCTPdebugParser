@@ -29,16 +29,45 @@ namespace SctpHostData
 	public class SctpHost
 	{
 		#region Properties		
+		/// <summary>
+		/// Endpoints dictionary, key is endpointId
+		/// </summary>
 		public Dictionary<int, SctpEndpoint> Endpoints {get; internal set;}
-		public Dictionary<int, SctpAssociation> Associations {get;set;}
-		public Dictionary<int, ExtClient> SCTPIclients{get;set;}
 		
-		public HostConfig Configuration {get;set;}
+		/// <summary>
+		/// Association dictionary, key is assocId
+		/// </summary>
+		public Dictionary<int, SctpAssociation> Associations {get; internal set;}
+		public Dictionary<int, ExtClient> SCTPIclients{get;internal set;}
 		
+		/// <summary>
+		/// Configuration of SCTP host
+		/// </summary>
+		public HostConfig Configuration {get;internal set;}
+		
+		/// <summary>
+		/// RPU id
+		/// </summary>
 		public int RpuId {get; internal set;}
+		
+		/// <summary>
+		/// Common Parts instance id
+		/// </summary>
 		public int CpId {get; internal set;}
+		
+		/// <summary>
+		/// BASE SCTP state
+		/// </summary>
 		public string BASEstate {get; internal set;}
+		
+		/// <summary>
+		/// SCTP host (ROF) sate
+		/// </summary>
 		public string HOSTstate {get; internal set;}
+		
+		/// <summary>
+		/// Type of board where SCTP host are executed
+		/// </summary>
 		public BoardType Board {get; internal set;}
 		#endregion Properties
 		

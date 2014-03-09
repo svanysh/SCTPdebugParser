@@ -26,6 +26,11 @@ namespace SctpHostData
 		static string input = "";
 		static protected Dictionary<int, SctpEndpoint> EPforAssoc = new Dictionary<int, SctpEndpoint>(512);
 
+		/// <summary>
+		/// Parse SctpHost from input file with name @ref fileName
+		/// </summary>
+		/// <param name="fileName">name of file to parse SctpHost</param>
+		/// <returns>parsed SctpHost</returns>
 		static public SctpHost Parse(String fileName)
 		{
 			if(fileName == "" || !File.Exists(fileName))
@@ -292,7 +297,8 @@ namespace SctpHostData
 				_host.Configuration.minThreshold = Convert.ToInt32(m.Groups["minThr"].Value);
 				_host.Configuration.maxThreshold = Convert.ToInt32(m.Groups["maxThr"].Value);
 				_host.Configuration.PFMR = Convert.ToInt32(m.Groups["PFMR"].Value);
-				_host.Configuration.DSCP = Convert.ToInt32(m.Groups["DSCP"].Value);				
+				_host.Configuration.DSCP = Convert.ToInt32(m.Groups["DSCP"].Value);
+				_host.Configuration.ZeroWndSupervisionTimer = Convert.ToInt32(m.Groups["zwndST"].Value);				
 			}
 			catch
 			{
