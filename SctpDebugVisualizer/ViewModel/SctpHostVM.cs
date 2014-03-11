@@ -69,6 +69,9 @@ namespace SctpDebugVisualizer.ViewModel
 		public string HOSTstate {get{return sctphost.HOSTstate;}}
 		public BoardType Board {get{return sctphost.Board;}}
 		
+		public string Ip1 {get {return sctphost.Configuration.IpAddresses.IpAddress1;}}
+		public string Ip2 {get {return sctphost.Configuration.IpAddresses.IpAddress2;}}
+		
 		public HostConfig Configuration {get {return sctphost.Configuration;}}
 		public ConfigVM Config { get;set;}
 		

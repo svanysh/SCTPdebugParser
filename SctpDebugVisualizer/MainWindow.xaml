@@ -39,6 +39,7 @@
 			<ColumnDefinition Width="*" />
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>		
+		<!-- Top panel -->
 		<StackPanel
 			Orientation="Horizontal"
 			Grid.ColumnSpan="3">
@@ -66,6 +67,13 @@
 						
 						<Run FontWeight="Bold">CP</Run>
 						<Run Text="{Binding Path=CpId, Mode=OneWay}" />
+					</Paragraph>
+					<Paragraph>
+						<Run Text="IP1"/>
+						<Run Text="{Binding Path=Ip1, Mode=OneWay}" />
+						
+						<Run Text="IP2"/>
+						<Run Text="{Binding Path=Ip2, Mode=OneWay}" />
 					</Paragraph>
 				</FlowDocument>
 			</FlowDocumentScrollViewer>				

@@ -17,6 +17,11 @@ namespace SctpHostData
 	{
 		#region Properties
 		
+		/// <summary>
+		/// Configured IP addresses
+		/// </summary>
+		public HostIpAddresses IpAddresses {get; internal set;}
+		
 		#region CC modules versions
 		/// <summary>
 		/// Common Parts version

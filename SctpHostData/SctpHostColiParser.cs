@@ -70,6 +70,8 @@ namespace SctpHostData
 			return _host;		
 		}
 		
+		protected const RegexOptions reOpt = RegexOptions.ExplicitCapture | RegexOptions.Singleline;
+		
 		#region Common Patterns
 		/// <summary>
 		/// pattern for IP address
@@ -100,11 +102,11 @@ namespace SctpHostData
         #endregion header
 		static protected bool ParseHeader()
 		{
-			if (Regex.Matches(input, headerPat).Count > 1)
+			if (Regex.Matches(input, headerPat, reOpt).Count > 1)
 				throw new Exception("there are more than one sctphost coli output in file");
 			/*foreach (Match m in Regex.Matches(input, headerPat))
 			{*/
-			Match m = Regex.Match(input, headerPat);
+			Match m = Regex.Match(input, headerPat, reOpt);
 				try
 				{
 					_host.RpuId = Convert.ToInt32(m.Groups["rpuId"].Value);
@@ -247,7 +249,8 @@ namespace SctpHostData
 		#endregion config file regex
 		static protected bool ParseConfig()
 		{
-			Match m = Regex.Match(input, baseLabel);
+			//TODO parse IP addresses
+			Match m = Regex.Match(input, baseLabel, reOpt);
 			try
 			{
 				_host.Configuration.CPversion = m.Groups["CPv"].Value;
@@ -259,7 +262,7 @@ namespace SctpHostData
 			{
 				return false;
 			}
-			m = Regex.Match(input, sctpCFpat);
+			m = Regex.Match(input, sctpCFpat, reOpt);
 			try
 			{
 				_host.Configuration.SCTPcfVersion = m.Groups["cfVer"].Value;
@@ -314,7 +317,7 @@ namespace SctpHostData
 		#endregion ext clients
 		static protected bool ParseExtClientsInfo()
 		{
-			foreach(Match m in Regex.Matches(input, extInfoPat))
+			foreach(Match m in Regex.Matches(input, extInfoPat, reOpt))
 			{
 				try
 				{
@@ -361,7 +364,7 @@ namespace SctpHostData
 		static protected bool ParseEndpoints()
 		{
 			/* M3UA endpoints */
-			foreach(Match m in Regex.Matches(input, m3epPat))
+			foreach(Match m in Regex.Matches(input, m3epPat, reOpt))
 			{
 				try
 				{
@@ -382,7 +385,7 @@ namespace SctpHostData
 				}
 			}
 			/* SCTPI endpoints */
-			foreach(Match m in Regex.Matches(input, epPat))
+			foreach(Match m in Regex.Matches(input, epPat, reOpt))
 			{
 				try
 				{
@@ -440,7 +443,7 @@ namespace SctpHostData
 		#endregion assoc pattern		
 		static protected bool ParseAssociations()
 		{
-			foreach(Match m in Regex.Matches(input, assocPat))
+			foreach(Match m in Regex.Matches(input, assocPat, reOpt))
 			{
 				try
 				{
@@ -634,7 +637,7 @@ namespace SctpHostData
 		static protected bool ParseAssociationCounters()
 		{
             bool isC14B = true;
-			foreach(Match m in Regex.Matches(input, AssocStat))
+			foreach(Match m in Regex.Matches(input, AssocStat, reOpt))
 			{
 				try
 				{
@@ -679,7 +682,7 @@ namespace SctpHostData
 			}
 			
             if (isC14B)
-            	foreach(Match m in Regex.Matches(input, AssocStat14B))
+            	foreach(Match m in Regex.Matches(input, AssocStat14B, reOpt))
 			{
 				try
 				{
