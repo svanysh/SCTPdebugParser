@@ -70,7 +70,7 @@ namespace SctpHostData
 			return _host;		
 		}
 		
-		protected const RegexOptions reOpt = RegexOptions.ExplicitCapture | RegexOptions.Singleline;
+		protected const RegexOptions reOpt = RegexOptions.ExplicitCapture;// | RegexOptions.Singleline;
 		
 		#region Common Patterns
 		/// <summary>
@@ -129,6 +129,14 @@ namespace SctpHostData
 			return true;
 		}
 
+		
+		/// <example>
+		/// ip1Addr:     192.168.10.23 (IPv4), state: OPENED
+		/// ip2Addr:     NONE (NONE), state: UNDEFINED
+		/// </example>
+		const string localIpPat = 
+			@".*ip1Addr:\s+(?<ip1>"+ipPat+@").*\n";//.*ip2Addr:\s+(?<ip1>"+ipPat+@").*\n";
+		
 		#region BASE labels
 		
 		/// <example>
@@ -152,7 +160,7 @@ namespace SctpHostData
 		///...
 		/// </example>
 		const string sctpCFpat = 
-			@".*\n.*\nCAA901548R10(?<cfVer>[\w]+)\s+File Version Number.*\n"+
+			@".*CAA901548R10(?<cfVer>[\w]+)\s+File Version Number.*\n"+
 			@"(?<numOfAssocs>[0-9]+)\s+Number of Associations.*\n"+
 			@".*\n"+ //Interval for lost user handling
 			@".*\n"+ //Key Change Period
@@ -194,7 +202,7 @@ namespace SctpHostData
 			@".*\n"+ //Multi-home Robustness
 			@".*\n"+ //Exhaustive IP Path Statistic Calculation
 			@".*\n"+ //Initial RWND Setting Timeout
-			@".*\n"+ //Maximum Number of Endpoint Users
+			@"(?:.*\n)?"+ //Maximum Number of Endpoint Users
 			@"(?:.*\n)?"+ //Management behaviour bitmask
 			@"(?:.*\n)?"+ //Check IP Interfaces timer value
 			@".*\n"+ //Number of Optional Config Groups
@@ -216,7 +224,7 @@ namespace SctpHostData
 			@"(?<HBstatus>[0|1])\s+Heartbeat Status.*\n"+
 			@".*\n"+ //	Hb.Max.Burst
 			@"(?<InitHBint>[0-9]+)\s+Initial HB Interval.*\n"+
-			@".*\n"+ //	Hb.Max.Burst
+			@".*\n"+ //	Smooth Factor
 			@"(?<MIS>[0-9]+)\s+Maximum Incoming Streams.*\n"+
 			@"(?<MOS>[0-9]+)\s+Maximum Outgoing Streams.*\n"+
 			@"(?<M>[0-9]+)\s+M in.*\n"+
@@ -245,26 +253,29 @@ namespace SctpHostData
 			@".*\n"+ //Number of Attempts to Probe Unreachable IP Paths
 			@".*\n"+ //Probing Unreachable IP Paths Interval
 			@"(?<DSCP>[0-9]+)\s+DSCP.*\n"+
-			@"(?<zwndST>[0-9]+)\s+Zero RWND Supervision Timer.*\n";
+			@"(?:(?<zwndST>[0-9]+)\s+Zero RWND Supervision Timer.*\n)?";
 		#endregion config file regex
 		static protected bool ParseConfig()
 		{
 			//TODO parse IP addresses
-			Match m = Regex.Match(input, baseLabel, reOpt);
-			try
-			{
+			Match m = Regex.Match(input, localIpPat, reOpt);
+			try	{
+				_host.Configuration.IpAddresses.IpAddress1 = m.Groups["ip1"].Value;
+				_host.Configuration.IpAddresses.IpAddress2 = m.Groups["ip2"].Value;
+			} catch {
+				//return false;
+			}
+			m = Regex.Match(input, baseLabel, reOpt);
+			try	{
 				_host.Configuration.CPversion = m.Groups["CPv"].Value;
 				_host.Configuration.MMversion = m.Groups["MMv"].Value;
 				_host.Configuration.FEIFversion = m.Groups["FEIFv"].Value;
 				_host.Configuration.SCTPversion = m.Groups["SCTPv"].Value;
-			}
-			catch
-			{
+			} catch {
 				return false;
 			}
 			m = Regex.Match(input, sctpCFpat, reOpt);
-			try
-			{
+			try	{
 				_host.Configuration.SCTPcfVersion = m.Groups["cfVer"].Value;
 				_host.Configuration.NumOfAssociations = Convert.ToInt32(m.Groups["numOfAssocs"].Value);
 				_host.Configuration.ICMPstatus = Convert.ToInt32(m.Groups["ICMPst"].Value);
@@ -301,10 +312,9 @@ namespace SctpHostData
 				_host.Configuration.maxThreshold = Convert.ToInt32(m.Groups["maxThr"].Value);
 				_host.Configuration.PFMR = Convert.ToInt32(m.Groups["PFMR"].Value);
 				_host.Configuration.DSCP = Convert.ToInt32(m.Groups["DSCP"].Value);
-				_host.Configuration.ZeroWndSupervisionTimer = Convert.ToInt32(m.Groups["zwndST"].Value);				
-			}
-			catch
-			{
+				if (m.Groups["zwndST"].Value != "")
+					_host.Configuration.ZeroWndSupervisionTimer = Convert.ToInt32(m.Groups["zwndST"].Value);
+			} catch	{
 				return false;
 			}
 			return true;
@@ -350,7 +360,7 @@ namespace SctpHostData
 		const string epPat =
 			@"SCTP ENDPOINT[ ]+(?<epId>\d{1,3}).*\n.*\n.*localPort:[ ]+(?<port>\d{1,5}).*\n"+
 			@".*dscp:[ ]+(?<dscp>\d+).*\n.*numOfLocalIp:[ ]+(?<nIP>\d).*\n"+
-			".*localIpAddress 1:[ ]+ (?<ip1>"+ipPat+").*\n(?:.*localIpAddress 2:[ ]+ (?<ip2>"+ipPat+").*\n*)?"+
+			".*localIpAddress 1:[ ]+ (?<ip1>"+ipPat+@").*\n(?:.*localIpAddress 2:[ ]+ (?<ip2>"+ipPat+@").*\n*)?"+
 			@".*list of associations:[ ]+(?<assocList>\d+(?: \d+)*).*\n"+
 			@".*Client identity:[ ]+(?<clId>\d).*\n";
 		
