@@ -55,6 +55,8 @@ namespace SctpDebugVisualizer.ViewModel
 			RaisePropChange("Board");			
 			RaisePropChange("Configuration");
 			RaisePropChange("Config");
+			RaisePropChange("Ip1");
+			RaisePropChange("Ip2");
 			return true;
 		}
 		

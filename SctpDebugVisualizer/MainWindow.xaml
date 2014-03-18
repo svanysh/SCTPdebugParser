@@ -69,10 +69,11 @@
 						<Run Text="{Binding Path=CpId, Mode=OneWay}" />
 					</Paragraph>
 					<Paragraph>
-						<Run Text="IP1"/>
+						<Run FontWeight="Bold" Text="IP1"/>
 						<Run Text="{Binding Path=Ip1, Mode=OneWay}" />
-						
-						<Run Text="IP2"/>
+					</Paragraph>
+					<Paragraph>					
+						<Run FontWeight="Bold" Text="IP2"/>
 						<Run Text="{Binding Path=Ip2, Mode=OneWay}" />
 					</Paragraph>
 				</FlowDocument>

@@ -236,6 +236,7 @@ namespace SctpHostData
 		
 		public HostConfig()
 		{
+			IpAddresses = new HostIpAddresses();
 		}
 	}
 }

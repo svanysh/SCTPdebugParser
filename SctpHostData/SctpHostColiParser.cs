@@ -154,7 +154,7 @@ namespace SctpHostData
 		/// ip2Addr:     NONE (NONE), state: UNDEFINED
 		/// </example>
 		const string localIpPat = 
-			@".*ip1Addr:\s+(?<ip1>"+ipPat+@").*\n";//.*ip2Addr:\s+(?<ip1>"+ipPat+@").*\n";
+			@"ip1Addr\:\s+(?<ip1>"+ipPat+@").*\n(.*ip2Addr\:\s+(?<ip2>"+ipPat+@").*\n)?";
 		
 		#region BASE labels
 		

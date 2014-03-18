@@ -27,6 +27,8 @@ namespace SctpHostData
 
 		public HostIpAddresses()
 		{
+			IpAddress1 = "";
+			IpAddress2 = "";
 		}
 	}
 }
