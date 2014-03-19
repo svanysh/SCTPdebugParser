@@ -31,15 +31,9 @@ namespace SctpHostData
 		/// </summary>
 		/// <param name="fileName">name of file to parse SctpHost</param>
 		/// <returns>parsed SctpHost</returns>
-		static public SctpHost Parse(String fileName)
-		{
-			if(fileName == "" || !File.Exists(fileName))
-			{
-				throw new Exception("incrrect path to file passed: "+fileName);
-			}
-			StreamReader sr = File.OpenText(fileName);			
-			input = sr.ReadToEnd();
-			
+		static public SctpHost Parse(String inputColi)
+		{		
+			input = inputColi;
 			_host = new SctpHost();
 			
 			if(!ParseHeader())
@@ -56,15 +50,15 @@ namespace SctpHostData
 			}
 			if(!ParseEndpoints())
 			{
-				throw new Exception("could not parse endpoints in scpthost coli command from target file: "+ fileName);
+				throw new Exception("could not parse endpoints in scpthost coli command");
 			}
 			if(!ParseAssociations())
 			{
-				throw new Exception("could not parse associations in scpthost coli command from target file: "+ fileName);
+				throw new Exception("could not parse associations in scpthost coli command");
 			}
 			if (!ParseAssociationCounters())
 			{
-				throw new Exception("could not parse assoc counters in scpthost coli command from target file: "+ fileName);
+				throw new Exception("could not parse assoc counters in scpthost coli command");
 			}
 			
 			return _host;		
@@ -116,8 +110,8 @@ namespace SctpHostData
 		const string headerPat =
 			@".*SCTP HOST.*\n.*RpuId:[ ]+(?<rpuId>\d+).*\n.*SctpInstId:[ ]+(?<cpId>[\-]?\d+).*\n"+
 			@".*Base State:[ ]+(?<baseState>SCTP_\w+).*\n.*Host State:[ ]+(?<hostState>.*)\n"+
-			@".*Non-M3UA clients:[ ]+(?<nExt>\d).*\n"/*+
-			@".*\n.*\n(?:.*HOST type:[ ]+(?<board>\w{3}).*\n)?"*/;
+			@".*Non-M3UA clients:[ ]+(?<nExt>\d).*\n"+
+			@".*\n.*\n(.*HOST type\:[ ]+(?<board>\w{3}).*\n)?";
         #endregion header
 		static protected bool ParseHeader()
 		{
@@ -166,10 +160,10 @@ namespace SctpHostData
  		/// SCTP: CAA901548-SCTP-R10F_1_EC02
 		const string baseLabel = 
 			@"BASE labels.*\n"+
-			@".*CP:\s+(?<CPv>CAA20129-CP-R[\w|_]+).*\n"+
-			@"\s*MM:\s+(?<MMv>CAA20130-MM-R[\w|_]+).*\n"+
-			@"(?:\s*FEIF:\s+(?<FEIFv>CAA901892-FE_HD-R[\w|_]+).*\n)?"+
-			@".*SCTP:\s+(?<SCTPv>CAA901548-SCTP-R[\w|_]+).*\n";
+			@".*CP\:\s+(?<CPv>CAA20129-CP-R[\w|_]+).*\n"+
+			@".*MM\:\s+(?<MMv>CAA20130-MM-R[\w|_]+).*\n"+
+			@"(.*FEIF\:\s+(?<FEIFv>CAA901892-FE_HD-R[\w|_]+).*\n)?"+
+			@".*SCTP\:\s+(?<SCTPv>CAA901548-SCTP-R[\w|_]+)";
  		
 		#endregion
 		#region config file regex

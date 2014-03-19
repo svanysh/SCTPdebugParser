@@ -31,15 +31,16 @@ namespace SctpDebugVisualizer.ViewModel
 			Endpoints = new ObservableCollection<SctpEndpoint>();
 		}
 		
-		public bool Load(string fileName)
+		
+		public bool Load(string inputStr)
 		{
 			try
 			{
-				sctphost = SctpHostColiParser.Parse(fileName);
+				sctphost = SctpHostColiParser.Parse(inputStr);
 			}
 			catch(Exception ex)
 			{
-				MessageBox.Show(ex.Message, "Parsing error for file "+fileName);
+				MessageBox.Show(ex.Message, "Parsing error");
 				return false;
 			}
 			EndpointFilter = new EndpointFilter(EndpointFilterType.All);
